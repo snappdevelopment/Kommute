@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feed_state_empty">No requests yet</string>
+    <string name="details_headline_url">URL</string>
+    <string name="details_headline_request_headers">Request Headers</string>
+    <string name="details_headline_request_body">Request Body</string>
+    <string name="details_headline_response_headers">Response Headers</string>
+    <string name="details_headline_response_body">Response Body</string>
+    <string name="details_response_body_empty">Empty Response Body</string>
+    <string name="details_request_body_empty">Empty Request Body</string>
+    <string name="details_headers_empty">Empty Headers</string>
+    <string name="details_state_error">Couldn\'t find request</string>
+    <string name="notification_name">Network Sniffer</string>
+    <string name="notification_text">Monitor your apps commute</string>
+    <string name="notification_channel_description">Notification for the Network Sniffer</string>
+</resources>
