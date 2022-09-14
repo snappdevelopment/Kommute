@@ -1,5 +1,6 @@
 package com.snad.kommute.logging
 
+import androidx.annotation.VisibleForTesting
 import kotlinx.coroutines.flow.*
 
 internal interface NetworkDataRepository {
@@ -37,7 +38,8 @@ internal interface NetworkDataRepository {
     }
 }
 
-private class InMemoryNetworkDataRepository : NetworkDataRepository {
+@VisibleForTesting
+internal class InMemoryNetworkDataRepository : NetworkDataRepository {
 
     private val lock = Any()
 
