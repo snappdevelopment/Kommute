@@ -1,19 +1,21 @@
 package com.snad.kommute
 
-import android.app.Notification
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationCompat.BubbleMetadata
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_IMMUTABLE
-import android.app.Person
+import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.Intent
-import android.content.LocusId
-import android.content.pm.ShortcutInfo
-import android.content.pm.ShortcutManager
-import android.graphics.drawable.Icon
+import android.os.Build
+import androidx.core.app.Person
+import androidx.core.content.LocusIdCompat
+import androidx.core.content.pm.ShortcutInfoCompat
+import androidx.core.content.pm.ShortcutManagerCompat
+import androidx.core.graphics.drawable.IconCompat
 import com.snad.kommute.ui.KommuteActivity
-import com.snad.kommute.R
 
 internal object KommuteNotification {
 
@@ -21,12 +23,18 @@ internal object KommuteNotification {
 
     fun send(context: Context) {
 
-        val activityIntent = Intent(context, KommuteActivity::class.java)
-        val bubbleIntent = PendingIntent.getActivity(context, 0, activityIntent, FLAG_IMMUTABLE)
+        val intentFlag = if (Build.VERSION.SDK_INT >= 23) {
+            FLAG_IMMUTABLE or FLAG_UPDATE_CURRENT
+        } else {
+            FLAG_UPDATE_CURRENT
+        }
 
-        val bubbleData = Notification.BubbleMetadata.Builder(
+        val activityIntent = Intent(context, KommuteActivity::class.java)
+        val bubbleIntent = PendingIntent.getActivity(context, 0, activityIntent, intentFlag)
+
+        val bubbleData = BubbleMetadata.Builder(
             bubbleIntent,
-            Icon.createWithResource(context, R.drawable.ic_notification_icon)
+            IconCompat.createWithResource(context, R.drawable.ic_notification_icon)
         )
             .setDesiredHeight(600)
             .build()
@@ -38,7 +46,7 @@ internal object KommuteNotification {
 
         createShortcut(context, person)
 
-        val notification = Notification.Builder(context, CHANNEL_ID)
+        val notification = NotificationCompat.Builder(context, CHANNEL_ID)
             .setContentIntent(bubbleIntent)
             .setContentTitle(context.getString(R.string.notification_name))
             .setContentText(context.getString(R.string.notification_text))
@@ -46,39 +54,42 @@ internal object KommuteNotification {
             .setBubbleMetadata(bubbleData)
             .setOnlyAlertOnce(true)
             .addPerson(person)
-            .setCategory(Notification.CATEGORY_MESSAGE)
-            .setStyle(Notification.MessagingStyle(person))
+            .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+            .setStyle(NotificationCompat.MessagingStyle(person))
             .setShortcutId(person.name.toString())
-            .setLocusId(LocusId(person.name.toString()))
+            .setLocusId(LocusIdCompat(person.name.toString()))
             .build()
 
-        val channel = NotificationChannel(
-            CHANNEL_ID,
-            context.getString(R.string.notification_name),
-            NotificationManager.IMPORTANCE_LOW
-        ).apply {
-            description = context.getString(R.string.notification_channel_description)
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        if (Build.VERSION.SDK_INT >= 26) {
+            val channel = NotificationChannel(
+                CHANNEL_ID,
+                context.getString(R.string.notification_name),
+                NotificationManager.IMPORTANCE_LOW
+            ).apply {
+                description = context.getString(R.string.notification_channel_description)
+            }
+
+            notificationManager.createNotificationChannel(channel)
         }
 
-        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.createNotificationChannel(channel)
         notificationManager.notify(R.id.network_sniffer_notification_id, notification)
     }
 
     private fun createShortcut(context: Context, person: Person) {
         val shortcutId = person.name.toString()
 
-        val shortcut = ShortcutInfo.Builder(context, shortcutId)
-            .setLocusId(LocusId(shortcutId))
+        val shortcut = ShortcutInfoCompat.Builder(context, shortcutId)
+            .setLocusId(LocusIdCompat(shortcutId))
             .setShortLabel(shortcutId)
-            .setIcon(Icon.createWithResource(context, R.drawable.ic_notification_icon))
+            .setIcon(IconCompat.createWithResource(context, R.drawable.ic_notification_icon))
             .setLongLived(true)
             .setPerson(person)
-            .setCategories(setOf(ShortcutInfo.SHORTCUT_CATEGORY_CONVERSATION))
+            .setIsConversation()
             .setIntent(Intent(context, KommuteActivity::class.java).setAction(Intent.ACTION_VIEW))
             .build()
 
-        val shortcutManager = context.getSystemService(Context.SHORTCUT_SERVICE) as ShortcutManager
-        shortcutManager.addDynamicShortcuts(listOf(shortcut))
+        ShortcutManagerCompat.pushDynamicShortcut(context, shortcut)
     }
 }
