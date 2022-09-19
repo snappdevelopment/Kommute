@@ -16,6 +16,7 @@ import com.snad.kommute.Kommute
 import com.snad.kommutedemo.network.BitcoinApi
 import com.snad.kommutedemo.network.getRetrofit
 import com.snad.kommutedemo.ui.theme.KommuteTheme
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
@@ -40,7 +41,7 @@ class MainActivity : ComponentActivity() {
                        modifier = Modifier.align(Alignment.Center),
                        onClick = { loadBitcoinPrice() }
                    ) {
-                       Text(text = "Make api call")
+                       Text(text = "Do 3 api calls")
                    }
                 }
             }
@@ -49,6 +50,10 @@ class MainActivity : ComponentActivity() {
 
     private fun loadBitcoinPrice() {
         lifecycleScope.launch {
+            api.getBitcoinPrice()
+            delay(3000)
+            api.getBitcoinPrice()
+            delay(3000)
             api.getBitcoinPrice()
         }
     }
