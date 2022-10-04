@@ -48,7 +48,7 @@ private fun Details(
         Column(modifier = Modifier.fillMaxSize()) {
             IconButton(onClick = onBackClicked) {
                 Icon(
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_back),
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_kommute_arrow_back),
                     contentDescription = null
                 )
             }
@@ -74,7 +74,7 @@ private fun Content(
             .verticalScroll(rememberScrollState())
             .padding(16.dp)
     ) {
-        Headline(text = stringResource(R.string.details_headline_url))
+        Headline(text = stringResource(R.string.kommute_details_headline_url))
 
         Spacer(modifier = Modifier.height(8.dp))
 
@@ -86,7 +86,7 @@ private fun Content(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Headline(text = stringResource(R.string.details_headline_request_headers))
+        Headline(text = stringResource(R.string.kommute_details_headline_request_headers))
 
         Spacer(modifier = Modifier.height(8.dp))
 
@@ -94,7 +94,7 @@ private fun Content(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Headline(text = stringResource(R.string.details_headline_request_body))
+        Headline(text = stringResource(R.string.kommute_details_headline_request_body))
 
         Spacer(modifier = Modifier.height(8.dp))
 
@@ -102,14 +102,14 @@ private fun Content(
             modifier = Modifier
                 .horizontalScroll(rememberScrollState())
                 .widthIn(max = LocalConfiguration.current.screenWidthDp.dp * 2),
-            text = networkRequestDetailsItem.requestBody ?: stringResource(R.string.details_request_body_empty),
+            text = networkRequestDetailsItem.requestBody ?: stringResource(R.string.kommute_details_request_body_empty),
             style = MaterialTheme.typography.body2,
             color = Color.DarkGray
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Headline(text = stringResource(R.string.details_headline_response_headers))
+        Headline(text = stringResource(R.string.kommute_details_headline_response_headers))
 
         Spacer(modifier = Modifier.height(8.dp))
 
@@ -117,7 +117,7 @@ private fun Content(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Headline(text = stringResource(R.string.details_headline_response_body))
+        Headline(text = stringResource(R.string.kommute_details_headline_response_body))
 
         Spacer(modifier = Modifier.height(8.dp))
 
@@ -125,7 +125,7 @@ private fun Content(
             modifier = Modifier
                 .horizontalScroll(rememberScrollState())
                 .widthIn(max = LocalConfiguration.current.screenWidthDp.dp * 2),
-            text = networkRequestDetailsItem.responseBody ?: stringResource(R.string.details_response_body_empty),
+            text = networkRequestDetailsItem.responseBody ?: stringResource(R.string.kommute_details_response_body_empty),
             style = MaterialTheme.typography.body2,
             color = Color.DarkGray
         )
@@ -149,7 +149,7 @@ private fun Headers(
 ) {
     if(headers.isNullOrEmpty()) {
         Text(
-            text = stringResource(R.string.details_headers_empty),
+            text = stringResource(R.string.kommute_details_headers_empty),
             style = MaterialTheme.typography.body2,
             color = Color.DarkGray
         )
@@ -203,7 +203,7 @@ private fun BoxScope.Error() {
         modifier = Modifier
             .align(Alignment.Center)
             .padding(horizontal = 16.dp),
-        text = stringResource(R.string.details_state_error),
+        text = stringResource(R.string.kommute_details_state_error),
         style = MaterialTheme.typography.h5,
         color = Color.Black.copy(alpha = 0.3f),
     )

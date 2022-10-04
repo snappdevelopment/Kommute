@@ -35,13 +35,13 @@ internal object KommuteNotification {
 
         val bubbleData = BubbleMetadata.Builder(
             bubbleIntent,
-            IconCompat.createWithResource(context, R.drawable.ic_notification_icon)
+            IconCompat.createWithResource(context, R.drawable.ic_kommute_notification_icon)
         )
             .setDesiredHeight(600)
             .build()
 
         val person = Person.Builder()
-            .setName(context.getString(R.string.notification_name))
+            .setName(context.getString(R.string.kommute_notification_name))
             .setImportant(true)
             .build()
 
@@ -49,9 +49,9 @@ internal object KommuteNotification {
 
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
             .setContentIntent(bubbleIntent)
-            .setContentTitle(context.getString(R.string.notification_name))
-            .setContentText(context.getString(R.string.notification_text))
-            .setSmallIcon(R.drawable.ic_notification_icon)
+            .setContentTitle(context.getString(R.string.kommute_notification_name))
+            .setContentText(context.getString(R.string.kommute_notification_text))
+            .setSmallIcon(R.drawable.ic_kommute_notification_icon)
             .setBubbleMetadata(bubbleData)
             .setOnlyAlertOnce(true)
             .addPerson(person)
@@ -66,10 +66,10 @@ internal object KommuteNotification {
         if (Build.VERSION.SDK_INT >= 26) {
             val channel = NotificationChannel(
                 CHANNEL_ID,
-                context.getString(R.string.notification_name),
+                context.getString(R.string.kommute_notification_name),
                 NotificationManager.IMPORTANCE_LOW
             ).apply {
-                description = context.getString(R.string.notification_channel_description)
+                description = context.getString(R.string.kommute_notification_channel_description)
             }
 
             notificationManager.createNotificationChannel(channel)
@@ -84,7 +84,7 @@ internal object KommuteNotification {
         val shortcut = ShortcutInfoCompat.Builder(context, shortcutId)
             .setLocusId(LocusIdCompat(shortcutId))
             .setShortLabel(shortcutId)
-            .setIcon(IconCompat.createWithResource(context, R.drawable.ic_notification_icon))
+            .setIcon(IconCompat.createWithResource(context, R.drawable.ic_kommute_notification_icon))
             .setLongLived(true)
             .setPerson(person)
             .setIsConversation()

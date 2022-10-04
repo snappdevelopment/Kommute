@@ -72,7 +72,7 @@ private fun FeedList(
             onClick = onClearClick
         ) {
             Icon(
-                imageVector = ImageVector.vectorResource(R.drawable.ic_delete),
+                imageVector = ImageVector.vectorResource(R.drawable.ic_kommute_delete),
                 tint = Color.DarkGray,
                 contentDescription = null
             )
@@ -205,7 +205,7 @@ private fun BoxScope.Empty() {
         modifier = Modifier
             .align(Alignment.Center)
             .padding(horizontal = 16.dp),
-        text = stringResource(R.string.feed_state_empty),
+        text = stringResource(R.string.kommute_feed_state_empty),
         style = MaterialTheme.typography.h5,
         color = Color.Black.copy(alpha = 0.3f),
     )
