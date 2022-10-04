@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = 'com.snad.kommute'
+    namespace = 'com.sebastianneubauer.kommute'
 
     compileSdk 33
 
