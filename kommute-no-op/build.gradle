@@ -4,6 +4,8 @@ plugins {
 }
 
 android {
+    namespace = 'com.sebastianneubauer.kommute'
+
     compileSdk 33
 
     defaultConfig {
@@ -12,6 +14,10 @@ android {
 
         versionCode 1
         versionName "1.0.0"
+
+        aarMetadata {
+            minCompileSdk = 21
+        }
     }
 
     kotlinOptions {

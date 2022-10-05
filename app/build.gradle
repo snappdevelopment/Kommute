@@ -8,7 +8,7 @@ android {
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.snad.kommutedemo"
+        applicationId "com.sebastianneubauer.kommutedemo"
         minSdk 26
         targetSdk 33
         versionCode 1
