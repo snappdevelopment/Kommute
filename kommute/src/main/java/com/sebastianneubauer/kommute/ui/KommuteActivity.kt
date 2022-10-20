@@ -16,7 +16,7 @@ import com.sebastianneubauer.kommute.util.LocalDateTimeFormatter
 
 internal class KommuteActivity : ComponentActivity() {
 
-    private val repository = Kommute.Factory.repository
+    private val repository = Kommute.repository
     private val dateTimeFormatter = LocalDateTimeFormatter()
     private val feedViewModelFactory = FeedViewModel.Factory(repository, dateTimeFormatter)
     private val detailsViewModelFactory = DetailsViewModel.Factory(repository)

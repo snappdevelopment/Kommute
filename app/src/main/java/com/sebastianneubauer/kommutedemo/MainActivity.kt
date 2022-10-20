@@ -26,12 +26,14 @@ import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
 
-    private val retrofit = getRetrofit()
-    private val api = BitcoinApi(retrofit)
-    private val kommute = Kommute.Factory.get()
+    private val kommute = Kommute.getInstance()
+    private lateinit var api: BitcoinApi
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val retrofit = getRetrofit(this)
+        api = BitcoinApi(retrofit)
 
         setContent {
             KommuteTheme {
@@ -56,7 +58,15 @@ class MainActivity : ComponentActivity() {
                         Button(
                             onClick = { loadBitcoinPrice() }
                         ) {
-                            Text(text = "Do 3 api calls")
+                            Text(text = "Make 3 api calls")
+                        }
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        Button(
+                            onClick = { makeNotFoundCall() }
+                        ) {
+                            Text(text = "Make 404 error api call")
                         }
                     }
                 }
@@ -71,6 +81,12 @@ class MainActivity : ComponentActivity() {
             api.getBitcoinPrice()
             delay(3000)
             api.getBitcoinPrice()
+        }
+    }
+
+    private fun makeNotFoundCall() {
+        lifecycleScope.launch {
+            api.makeNotFoundCall()
         }
     }
 }

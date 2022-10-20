@@ -18,6 +18,16 @@ internal class BitcoinApi(
             ApiResult.Error
         }
     }
+
+    suspend fun makeNotFoundCall(): ApiResult {
+        return try {
+            service.makeNotFoundCall()
+            ApiResult.Success
+        }
+        catch (error: Exception) {
+            ApiResult.Error
+        }
+    }
 }
 
 internal sealed class ApiResult {
@@ -28,4 +38,7 @@ internal sealed class ApiResult {
 internal interface BitcoinPriceService {
     @GET("v1/bpi/currentprice.json")
     suspend fun getBitcoinPrice(): BitcoinPrice
+
+    @GET("v1/bpi/non-existent.json")
+    suspend fun makeNotFoundCall(): BitcoinPrice
 }

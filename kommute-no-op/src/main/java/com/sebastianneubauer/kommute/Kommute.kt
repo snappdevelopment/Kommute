@@ -5,12 +5,12 @@ import com.sebastianneubauer.kommute.logging.NoopKommuteInterceptor
 import okhttp3.Interceptor
 
 public interface Kommute {
-    public fun getInterceptor(): Interceptor
-
     public fun start(context: Context)
 
-    public object Factory {
-        public fun get(): Kommute {
+    public fun getInterceptor(): Interceptor
+
+    public companion object {
+        public fun getInstance(): Kommute {
             return NoopKommute()
         }
     }
@@ -18,11 +18,11 @@ public interface Kommute {
 
 private class NoopKommute: Kommute {
 
-    override fun getInterceptor(): Interceptor {
-        return NoopKommuteInterceptor()
-    }
-
     override fun start(context: Context) {
         //noop
+    }
+
+    override fun getInterceptor(): Interceptor {
+        return NoopKommuteInterceptor()
     }
 }
