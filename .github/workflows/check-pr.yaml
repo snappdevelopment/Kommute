@@ -9,7 +9,6 @@ on:
 
 jobs:
   buildDebug:
-    name: Build debug
     runs-on: ubuntu-latest
 
     steps:
@@ -26,7 +25,6 @@ jobs:
         run: ./gradlew assembleDebug
 
   testDebug:
-    name: Test debug
     runs-on: ubuntu-latest
     needs: buildDebug
 
@@ -44,7 +42,6 @@ jobs:
         run: ./gradlew testDebug
 
   buildRelease:
-    name: Build release
     runs-on: ubuntu-latest
 
     steps:
@@ -61,7 +58,6 @@ jobs:
         run: ./gradlew assembleRelease
 
   testRelease:
-    name: Test release
     runs-on: ubuntu-latest
     needs: buildRelease
 
