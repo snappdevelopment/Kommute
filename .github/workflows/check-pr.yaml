@@ -22,7 +22,7 @@ jobs:
           java-version: '11'
 
       - name: Build Debug
-        run: ./gradlew assembleDebug
+        run: ./gradlew buildDebug --stacktrace
 
   testDebug:
     runs-on: ubuntu-latest
@@ -39,7 +39,7 @@ jobs:
           java-version: '11'
 
       - name: Run debug unit tests
-        run: ./gradlew testDebug
+        run: ./gradlew testDebug --stacktrace
 
   buildRelease:
     runs-on: ubuntu-latest
@@ -55,7 +55,7 @@ jobs:
           java-version: '11'
 
       - name: Build Release
-        run: ./gradlew assembleRelease
+        run: ./gradlew buildRelease --stacktrace
 
   testRelease:
     runs-on: ubuntu-latest
@@ -72,4 +72,4 @@ jobs:
           java-version: '11'
 
       - name: Run release unit tests
-        run: ./gradlew testRelease
+        run: ./gradlew testRelease --stacktrace
