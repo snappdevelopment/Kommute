@@ -4,28 +4,14 @@ plugins {
     id 'com.vanniktech.maven.publish'
 }
 
+apply from: "$rootProject.projectDir/common-android.gradle"
+
 android {
-    namespace = 'com.sebastianneubauer.kommute'
-
-    compileSdk 33
-
-    defaultConfig {
-        minSdk 21
-        targetSdk 33
-
-        versionCode 1
-        versionName "0.0.1"
-
-        aarMetadata {
-            minCompileSdk = 21
-        }
-    }
-
     kotlinOptions {
         freeCompilerArgs += ["-Xexplicit-api=strict"]
     }
 }
 
 dependencies {
-    implementation "com.squareup.okhttp3:logging-interceptor:4.9.3"
+    implementation "com.squareup.okhttp3:okhttp:4.10.0"
 }

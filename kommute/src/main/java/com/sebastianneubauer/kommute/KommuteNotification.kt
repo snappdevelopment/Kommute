@@ -75,7 +75,7 @@ internal object KommuteNotification {
             notificationManager.createNotificationChannel(channel)
         }
 
-        notificationManager.notify(R.id.network_sniffer_notification_id, notification)
+        notificationManager.notify(R.id.kommute_notification_id, notification)
     }
 
     private fun createShortcut(context: Context, person: Person) {
