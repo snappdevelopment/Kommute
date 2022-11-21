@@ -14,4 +14,8 @@ android {
             minCompileSdk = 21
         }
     }
+
+    buildFeatures {
+        buildConfig = false
+    }
 }
