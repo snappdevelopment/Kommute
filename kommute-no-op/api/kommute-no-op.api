@@ -1,0 +1,10 @@
+public abstract interface class com/sebastianneubauer/kommute/Kommute {
+	public static final field Companion Lcom/sebastianneubauer/kommute/Kommute$Companion;
+	public abstract fun getInterceptor ()Lokhttp3/Interceptor;
+	public abstract fun start (Landroid/content/Context;)V
+}
+
+public final class com/sebastianneubauer/kommute/Kommute$Companion {
+	public final fun getInstance ()Lcom/sebastianneubauer/kommute/Kommute;
+}
+

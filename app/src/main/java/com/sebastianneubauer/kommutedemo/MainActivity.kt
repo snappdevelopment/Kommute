@@ -24,7 +24,7 @@ import com.sebastianneubauer.kommutedemo.ui.theme.KommuteTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class MainActivity : ComponentActivity() {
+internal class MainActivity : ComponentActivity() {
 
     private val kommute = Kommute.getInstance()
     private lateinit var api: BitcoinApi

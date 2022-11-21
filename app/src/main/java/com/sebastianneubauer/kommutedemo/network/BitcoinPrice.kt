@@ -5,7 +5,7 @@ import com.squareup.moshi.Json
 
 
 @JsonClass(generateAdapter = true)
-data class BitcoinPrice(
+internal data class BitcoinPrice(
     @Json(name = "bpi")
     val bpi: Bpi,
     @Json(name = "chartName")
@@ -17,7 +17,7 @@ data class BitcoinPrice(
 )
 
 @JsonClass(generateAdapter = true)
-data class Bpi(
+internal data class Bpi(
     @Json(name = "EUR")
     val eUR: EUR,
     @Json(name = "GBP")
@@ -27,7 +27,7 @@ data class Bpi(
 )
 
 @JsonClass(generateAdapter = true)
-data class Time(
+internal data class Time(
     @Json(name = "updated")
     val updated: String,
     @Json(name = "updatedISO")
@@ -37,7 +37,7 @@ data class Time(
 )
 
 @JsonClass(generateAdapter = true)
-data class EUR(
+internal data class EUR(
     @Json(name = "code")
     val code: String,
     @Json(name = "description")
@@ -51,7 +51,7 @@ data class EUR(
 )
 
 @JsonClass(generateAdapter = true)
-data class GBP(
+internal data class GBP(
     @Json(name = "code")
     val code: String,
     @Json(name = "description")
@@ -65,7 +65,7 @@ data class GBP(
 )
 
 @JsonClass(generateAdapter = true)
-data class USD(
+internal data class USD(
     @Json(name = "code")
     val code: String,
     @Json(name = "description")
