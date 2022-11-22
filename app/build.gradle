@@ -5,6 +5,7 @@ plugins {
 }
 
 android {
+    namespace="com.sebastianneubauer.kommutedemo"
     compileSdk 33
 
     defaultConfig {
