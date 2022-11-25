@@ -1,7 +1,7 @@
 plugins {
-    id 'com.android.library'
-    id 'org.jetbrains.kotlin.android'
-    id 'com.vanniktech.maven.publish'
+    alias libs.plugins.android.library
+    alias libs.plugins.kotlin.android
+    alias libs.plugins.publish
 }
 
 apply from: "$rootProject.projectDir/common-android.gradle"
@@ -13,5 +13,5 @@ android {
 }
 
 dependencies {
-    implementation "com.squareup.okhttp3:okhttp:4.10.0"
+    implementation libs.okhttp
 }
