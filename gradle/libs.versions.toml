@@ -1,0 +1,77 @@
+[versions]
+android-min = "21"
+android-target = "33"
+
+java = "1.8"
+
+gradle-plugin = "7.2.0"
+kotlin = "1.7.10"
+publish = "0.22.0"
+api-validator = "0.12.1"
+ksp = "1.7.10-1.0.6"
+
+androidx-core = "1.9.0"
+androidx-activity-compose = "1.4.0"
+androidx-compose-compiler = "1.3.0"
+androidx-compose = "1.1.1"
+androidx-navigation = "2.4.2"
+androidx-lifecycle = "2.5.1"
+androidx-lifecycle-runtime-compose = "2.6.0-alpha01"
+
+coroutines = "1.6.4"
+android-desugar = "2.0.0"
+
+okhttp = "4.10.0"
+retrofit = "2.7.2"
+
+moshi = "1.13.0"
+
+junit = "4.13.2"
+turbine = "0.9.0"
+json = "20220320"
+
+
+[libraries]
+okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+retrofit-moshi = { module = "com.squareup.retrofit2:converter-moshi", version.ref = "retrofit" }
+
+moshi = { module = "com.squareup.moshi:moshi", version.ref = "moshi" }
+moshi-codegen = { module = "com.squareup.moshi:moshi-kotlin-codegen", version.ref = "moshi" }
+
+coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
+
+androidx-core = { module = "androidx.core:core-ktx", version.ref = "androidx-core" }
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity-compose" }
+androidx-compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "androidx-compose-compiler" }
+androidx-compose-ui = { module = "androidx.compose.ui:ui", version.ref = "androidx-compose" }
+androidx-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "androidx-compose" }
+androidx-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "androidx-compose" }
+androidx-compose-foundation = { module = "androidx.compose.foundation:foundation", version.ref = "androidx-compose" }
+androidx-compose-material = { module = "androidx.compose.material:material", version.ref = "androidx-compose" }
+androidx-compose-runtime = { module = "androidx.compose.runtime:runtime", version.ref = "androidx-compose" }
+androidx-navigation-common = { module = "androidx.navigation:navigation-common-ktx", version.ref = "androidx-navigation" }
+androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "androidx-navigation" }
+androidx-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidx-lifecycle" }
+androidx-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "androidx-lifecycle" }
+androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "androidx-lifecycle" }
+androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidx-lifecycle-runtime-compose" }
+
+android-desugar = { module = "com.android.tools:desugar_jdk_libs", version.ref = "android-desugar" }
+
+testing-junit = { module = "junit:junit", version.ref = "junit" }
+testing-turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
+testing-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
+testing-json = { module = "org.json:json", version.ref = "json" }
+
+publish = { module = "com.vanniktech:gradle-maven-publish-plugin", version.ref = "publish" }
+
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "gradle-plugin" }
+android-library = { id = "com.android.library", version.ref = "gradle-plugin" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+publish = { id = "com.vanniktech.maven.publish", version.ref = "publish" }
+api-validator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version.ref = "api-validator" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
