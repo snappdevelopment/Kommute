@@ -4,7 +4,7 @@ android-target = "33"
 
 java = "1.8"
 
-gradle-plugin = "7.2.0"
+gradle-plugin = "7.3.1"
 kotlin = "1.7.10"
 publish = "0.22.0"
 api-validator = "0.12.1"
@@ -19,7 +19,7 @@ androidx-lifecycle = "2.5.1"
 androidx-lifecycle-runtime-compose = "2.6.0-alpha01"
 
 coroutines = "1.6.4"
-android-desugar = "2.0.0"
+android-desugar = "1.2.2"
 
 okhttp = "4.10.0"
 retrofit = "2.7.2"
