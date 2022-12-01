@@ -22,7 +22,7 @@ coroutines = "1.6.4"
 android-desugar = "1.2.2"
 
 okhttp = "4.10.0"
-retrofit = "2.7.2"
+retrofit = "2.9.0"
 
 moshi = "1.14.0"
 
