@@ -7,7 +7,6 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
     uses: snappdevelopment/kommute/.github/workflows/check-pr.yaml@main
 
   createRelease:
