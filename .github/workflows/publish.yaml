@@ -8,10 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
-    steps:
-      - name: Check PR
-        uses: snappdevelopment/kommute/.github/workflows/check-pr.yaml@main
+    uses: snappdevelopment/kommute/.github/workflows/check-pr.yaml@main
 
   createRelease:
     runs-on: ubuntu-latest
