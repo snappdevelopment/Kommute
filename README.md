@@ -1,4 +1,4 @@
-# <img src="screenshots/KommuteIcon.png" height="25"> Kommute 
+# <img src="screenshots/kommuteIcon.png" height="25"> Kommute 
 
 ![](https://img.shields.io/badge/Version-0.0.2-blue) ![](https://img.shields.io/badge/Kotlin-1.7.20-orange) ![](https://img.shields.io/badge/SDK-21+-brightgreen)
 <br /><br />
