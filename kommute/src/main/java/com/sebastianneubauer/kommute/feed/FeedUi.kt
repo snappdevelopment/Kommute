@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -78,8 +79,17 @@ private fun FeedList(
             )
         }
 
+        val lazyListState = rememberLazyListState()
+
+        LaunchedEffect(state.requests) {
+            if(lazyListState.firstVisibleItemIndex != 0 && !lazyListState.isScrollInProgress) {
+                lazyListState.animateScrollToItem(0)
+            }
+        }
+
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
+            state = lazyListState
         ) {
             itemsIndexed(items = state.requests, key = { _, item -> item.id }) { index, item ->
                 Request(item = item, onRequestClick = onRequestClick)
