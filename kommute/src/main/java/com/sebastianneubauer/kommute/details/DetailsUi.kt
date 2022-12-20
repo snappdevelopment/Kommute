@@ -10,9 +10,17 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,7 +33,12 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.rememberPagerState
 import com.sebastianneubauer.kommute.R
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
@@ -69,72 +82,188 @@ private fun Details(
     }
 }
 
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 private fun Content(
     networkRequestDetailsItem: NetworkRequestDetailsItem
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(16.dp)
-    ) {
-        Headline(text = stringResource(R.string.kommute_details_headline_url))
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Text(
-            text = networkRequestDetailsItem.url,
-            style = MaterialTheme.typography.bodyMedium,
-            color = Color.DarkGray
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Headline(text = stringResource(R.string.kommute_details_headline_request_headers))
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Headers(headers = networkRequestDetailsItem.requestHeaders)
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Headline(text = stringResource(R.string.kommute_details_headline_request_body))
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Text(
-            modifier = Modifier
-                .horizontalScroll(rememberScrollState())
-                .widthIn(max = LocalConfiguration.current.screenWidthDp.dp * 2),
-            text = networkRequestDetailsItem.requestBody ?: stringResource(R.string.kommute_details_request_body_empty),
-            style = MaterialTheme.typography.bodyMedium,
-            color = Color.DarkGray
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Headline(text = stringResource(R.string.kommute_details_headline_response_headers))
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Headers(headers = networkRequestDetailsItem.responseHeaders)
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Headline(text = stringResource(R.string.kommute_details_headline_response_body))
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Text(
-            modifier = Modifier
-                .horizontalScroll(rememberScrollState())
-                .widthIn(max = LocalConfiguration.current.screenWidthDp.dp * 2),
-            text = networkRequestDetailsItem.responseBody ?: stringResource(R.string.kommute_details_response_body_empty),
-            style = MaterialTheme.typography.bodyMedium,
-            color = Color.DarkGray
-        )
+    val coroutineScope = rememberCoroutineScope()
+    var selectedTab by remember { mutableStateOf(SelectedTab.RESPONSE) }
+    val pagerState = rememberPagerState(selectedTab.index)
+    LaunchedEffect(pagerState) {
+        snapshotFlow { pagerState.currentPage }
+            .distinctUntilChanged()
+            .collect { selectedTab = SelectedTab.getTabForIndex(it) }
     }
+
+    Column {
+        TabRow(
+            modifier = Modifier.fillMaxWidth(),
+            containerColor = Color.White,
+            contentColor = Color.DarkGray,
+            selectedTabIndex = selectedTab.index,
+        ) {
+            PagerTab(
+                title = stringResource(R.string.kommute_details_tab_title_response),
+                selected = selectedTab == SelectedTab.RESPONSE,
+                onClick = {
+                    selectedTab = SelectedTab.RESPONSE
+                    coroutineScope.launch {
+                        pagerState.animateScrollToPage(SelectedTab.RESPONSE.index)
+                    }
+                }
+            )
+
+            PagerTab(
+                title = stringResource(R.string.kommute_details_tab_title_request),
+                selected = selectedTab == SelectedTab.REQUEST,
+                onClick = {
+                    selectedTab = SelectedTab.REQUEST
+                    coroutineScope.launch {
+                        pagerState.animateScrollToPage(SelectedTab.REQUEST.index)
+                    }
+                }
+            )
+
+            PagerTab(
+                title = stringResource(R.string.kommute_details_tab_title_headers),
+                selected = selectedTab == SelectedTab.HEADERS,
+                onClick = {
+                    selectedTab = SelectedTab.HEADERS
+                    coroutineScope.launch {
+                        pagerState.animateScrollToPage(SelectedTab.HEADERS.index)
+                    }
+                }
+            )
+        }
+
+        HorizontalPager(
+            count = 3,
+            state = pagerState
+        ) { pageIndex ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+                    .padding(16.dp)
+            ) {
+                when(pageIndex) {
+                    0 -> ResponseTab(networkRequestDetailsItem.responseBody)
+                    1 -> RequestTab(networkRequestDetailsItem.requestBody)
+                    2 -> HeadersTab(
+                        url = networkRequestDetailsItem.url,
+                        requestHeaders = networkRequestDetailsItem.requestHeaders,
+                        responseHeaders = networkRequestDetailsItem.responseHeaders
+                    )
+                }
+            }
+        }
+    }
+}
+
+private enum class SelectedTab(val index: Int) {
+    RESPONSE(0),
+    REQUEST(1),
+    HEADERS(2);
+
+    companion object {
+        fun getTabForIndex(index: Int): SelectedTab {
+            return when(index) {
+                0 -> RESPONSE
+                1 -> REQUEST
+                2 -> HEADERS
+                else -> RESPONSE
+            }
+        }
+    }
+}
+
+@Composable
+private fun ResponseTab(
+    responseBody: String?
+) {
+    Headline(text = stringResource(R.string.kommute_details_headline_response_body))
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    Text(
+        modifier = Modifier
+            .horizontalScroll(rememberScrollState())
+            .widthIn(max = LocalConfiguration.current.screenWidthDp.dp * 2),
+        text = responseBody ?: stringResource(R.string.kommute_details_response_body_empty),
+        style = MaterialTheme.typography.bodyMedium,
+        color = Color.DarkGray
+    )
+}
+
+@Composable
+private fun RequestTab(
+    requestBody: String?
+) {
+    Headline(text = stringResource(R.string.kommute_details_headline_request_body))
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    Text(
+        modifier = Modifier
+            .horizontalScroll(rememberScrollState())
+            .widthIn(max = LocalConfiguration.current.screenWidthDp.dp * 2),
+        text = requestBody ?: stringResource(R.string.kommute_details_request_body_empty),
+        style = MaterialTheme.typography.bodyMedium,
+        color = Color.DarkGray
+    )
+}
+
+@Composable
+private fun HeadersTab(
+    url: String,
+    requestHeaders: Map<String, String>,
+    responseHeaders: Map<String, String>?
+) {
+    Headline(text = stringResource(R.string.kommute_details_headline_url))
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    Text(
+        text = url,
+        style = MaterialTheme.typography.bodyMedium,
+        color = Color.DarkGray
+    )
+
+    Spacer(modifier = Modifier.height(16.dp))
+
+    Headline(text = stringResource(R.string.kommute_details_headline_request_headers))
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    Headers(headers = requestHeaders)
+
+    Spacer(modifier = Modifier.height(16.dp))
+
+    Headline(text = stringResource(R.string.kommute_details_headline_response_headers))
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    Headers(headers = responseHeaders)
+}
+
+@Composable
+private fun PagerTab(
+    title: String,
+    selected: Boolean,
+    onClick: () -> Unit
+) {
+    Tab(
+        text = {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.bodyMedium,
+                color = Color.DarkGray
+            )
+        },
+        selected = selected,
+        onClick = onClick
+    )
 }
 
 @Composable
