@@ -1,12 +1,29 @@
 package com.sebastianneubauer.kommute.feed
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SmallFloatingActionButton
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -21,6 +38,7 @@ import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sebastianneubauer.kommute.R
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
@@ -58,40 +76,70 @@ private fun Feed(
     }
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 private fun FeedList(
     state: Content,
     onRequestClick: (Long) -> Unit,
     onClearClick: () -> Unit
 ) {
-    Column(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        IconButton(
-            modifier = Modifier.align(Alignment.End),
-            onClick = onClearClick
+    val coroutineScope = rememberCoroutineScope()
+    val lazyListState = rememberLazyListState()
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier.fillMaxSize()
         ) {
-            Icon(
-                imageVector = ImageVector.vectorResource(R.drawable.ic_kommute_delete),
-                tint = Color.DarkGray,
-                contentDescription = null
-            )
+            IconButton(
+                modifier = Modifier.align(Alignment.End),
+                onClick = onClearClick
+            ) {
+                Icon(
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_kommute_delete),
+                    tint = Color.DarkGray,
+                    contentDescription = null
+                )
+            }
+
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                state = lazyListState
+            ) {
+                itemsIndexed(items = state.requests, key = { _, item -> item.id }) { index, item ->
+                    Request(item = item, onRequestClick = onRequestClick)
+
+                    if(index < state.requests.size - 1) {
+                        Divider(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp),
+                            color = Color.LightGray
+                        )
+                    }
+                }
+            }
         }
 
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-        ) {
-            itemsIndexed(items = state.requests, key = { _, item -> item.id }) { index, item ->
-                Request(item = item, onRequestClick = onRequestClick)
+        val showUpFab by remember { derivedStateOf { lazyListState.firstVisibleItemIndex != 0 } }
 
-                if(index < state.requests.size - 1) {
-                    Divider(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp),
-                        color = Color.LightGray
-                    )
-                }
+        AnimatedVisibility(
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(16.dp),
+            visible = showUpFab,
+            enter = fadeIn() + scaleIn(),
+            exit = fadeOut() + scaleOut(),
+        ) {
+            SmallFloatingActionButton(
+                containerColor = Color.DarkGray,
+                contentColor = Color.LightGray,
+                onClick = { coroutineScope.launch { lazyListState.animateScrollToItem(0) } }
+            ) {
+                Icon(
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_kommute_arrow_up),
+                    tint = Color.LightGray,
+                    contentDescription = null
+                )
             }
         }
     }
@@ -114,7 +162,7 @@ private fun Request(
         ) {
             Text(
                 text = item.dateTime,
-                style = MaterialTheme.typography.body2,
+                style = MaterialTheme.typography.bodyMedium,
                 color = Color.DarkGray,
             )
 
@@ -126,7 +174,7 @@ private fun Request(
 
             Text(
                 text = item.method,
-                style = MaterialTheme.typography.body2,
+                style = MaterialTheme.typography.bodyMedium,
                 color = Color.DarkGray
             )
 
@@ -149,7 +197,7 @@ private fun Request(
                 is NetworkRequestListItem.Finished -> {
                     Text(
                         text = item.statusCode.toString(),
-                        style = MaterialTheme.typography.body2,
+                        style = MaterialTheme.typography.bodyMedium,
                         color = if(item.statusCode >= 400) Color.Red else Color.DarkGray
                     )
 
@@ -161,7 +209,7 @@ private fun Request(
 
                     Text(
                         text = item.duration,
-                        style = MaterialTheme.typography.body2,
+                        style = MaterialTheme.typography.bodyMedium,
                         color = Color.DarkGray
                     )
                 }
@@ -173,7 +221,7 @@ private fun Request(
 
         Text(
             text = item.url,
-            style = MaterialTheme.typography.body1,
+            style = MaterialTheme.typography.bodyLarge,
             color = Color.Black,
             maxLines = 3,
             overflow = TextOverflow.Ellipsis
@@ -184,7 +232,7 @@ private fun Request(
 
             Text(
                 text = item.errorMessage,
-                style = MaterialTheme.typography.body2,
+                style = MaterialTheme.typography.bodyMedium,
                 color = Color.Red,
             )
         }
@@ -206,7 +254,7 @@ private fun BoxScope.Empty() {
             .align(Alignment.Center)
             .padding(horizontal = 16.dp),
         text = stringResource(R.string.kommute_feed_state_empty),
-        style = MaterialTheme.typography.h5,
+        style = MaterialTheme.typography.headlineSmall,
         color = Color.Black.copy(alpha = 0.3f),
     )
 }
@@ -235,7 +283,7 @@ private fun FeedPreview() {
                             " elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
                 ),
                 NetworkRequestListItem.Finished(
-                    id = 0L,
+                    id = 1L,
                     dateTime = "15:13:24",
                     method = "GET",
                     statusCode = 200,
@@ -244,7 +292,7 @@ private fun FeedPreview() {
                             "elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
                 ),
                 NetworkRequestListItem.Failed(
-                    id = 0L,
+                    id = 2L,
                     dateTime = "15:13:24",
                     method = "GET",
                     url = "www.example.com/api?id=5&text=Lorem ipsum dolor sit amet, consectetur adipiscing" +
