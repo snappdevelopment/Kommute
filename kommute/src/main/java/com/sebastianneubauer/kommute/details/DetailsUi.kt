@@ -5,7 +5,12 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -80,7 +85,7 @@ private fun Content(
 
         Text(
             text = networkRequestDetailsItem.url,
-            style = MaterialTheme.typography.body2,
+            style = MaterialTheme.typography.bodyMedium,
             color = Color.DarkGray
         )
 
@@ -103,7 +108,7 @@ private fun Content(
                 .horizontalScroll(rememberScrollState())
                 .widthIn(max = LocalConfiguration.current.screenWidthDp.dp * 2),
             text = networkRequestDetailsItem.requestBody ?: stringResource(R.string.kommute_details_request_body_empty),
-            style = MaterialTheme.typography.body2,
+            style = MaterialTheme.typography.bodyMedium,
             color = Color.DarkGray
         )
 
@@ -126,7 +131,7 @@ private fun Content(
                 .horizontalScroll(rememberScrollState())
                 .widthIn(max = LocalConfiguration.current.screenWidthDp.dp * 2),
             text = networkRequestDetailsItem.responseBody ?: stringResource(R.string.kommute_details_response_body_empty),
-            style = MaterialTheme.typography.body2,
+            style = MaterialTheme.typography.bodyMedium,
             color = Color.DarkGray
         )
     }
@@ -138,7 +143,7 @@ private fun Headline(
 ) {
     Text(
         text = text,
-        style = MaterialTheme.typography.h6,
+        style = MaterialTheme.typography.titleLarge,
         color = Color.Black
     )
 }
@@ -150,7 +155,7 @@ private fun Headers(
     if(headers.isNullOrEmpty()) {
         Text(
             text = stringResource(R.string.kommute_details_headers_empty),
-            style = MaterialTheme.typography.body2,
+            style = MaterialTheme.typography.bodyMedium,
             color = Color.DarkGray
         )
     } else {
@@ -161,7 +166,7 @@ private fun Headers(
                 Text(
                     modifier = Modifier.weight(1F),
                     text = entry.key,
-                    style = MaterialTheme.typography.body2,
+                    style = MaterialTheme.typography.bodyMedium,
                     color = Color.DarkGray
                 )
 
@@ -170,7 +175,7 @@ private fun Headers(
                 Text(
                     modifier = Modifier.weight(1F),
                     text = entry.value,
-                    style = MaterialTheme.typography.body2,
+                    style = MaterialTheme.typography.bodyMedium,
                     color = Color.DarkGray
                 )
             }
@@ -204,7 +209,7 @@ private fun BoxScope.Error() {
             .align(Alignment.Center)
             .padding(horizontal = 16.dp),
         text = stringResource(R.string.kommute_details_state_error),
-        style = MaterialTheme.typography.h5,
+        style = MaterialTheme.typography.headlineSmall,
         color = Color.Black.copy(alpha = 0.3f),
     )
 }
