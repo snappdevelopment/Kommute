@@ -22,6 +22,8 @@ androidx-lifecycle-runtime-compose = "2.6.0-alpha03"
 coroutines = "1.6.4"
 android-desugar = "1.2.2"
 
+accompanist = "0.28.0"
+
 okhttp = "4.10.0"
 retrofit = "2.9.0"
 
@@ -60,6 +62,8 @@ androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-
 androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidx-lifecycle-runtime-compose" }
 
 android-desugar = { module = "com.android.tools:desugar_jdk_libs", version.ref = "android-desugar" }
+
+accompanist-pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanist" }
 
 testing-junit = { module = "junit:junit", version.ref = "junit" }
 testing-turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
