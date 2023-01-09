@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
@@ -48,65 +49,80 @@ internal class MainActivity : ComponentActivity() {
 
         setContent {
             KommuteTheme {
-                Box(
+                Column(
                     modifier = Modifier
                         .fillMaxSize()
+                        .padding(horizontal = 16.dp)
+                        .verticalScroll(rememberScrollState())
                         .background(MaterialTheme.colorScheme.background),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .verticalScroll(rememberScrollState()),
-                        horizontalAlignment = Alignment.CenterHorizontally
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Button(
+                        onClick = { kommute.start(this@MainActivity) }
                     ) {
-                        Spacer(modifier = Modifier.height(16.dp))
+                        Text(text = "Start Kommute")
+                    }
 
-                        Button(
-                            onClick = { kommute.start(this@MainActivity) }
-                        ) {
-                            Text(text = "Start Kommute")
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Button(
+                        onClick = { loadBitcoinPrice() }
+                    ) {
+                        Text(text = "Make 3 api calls")
+                    }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Button(
+                        onClick = { makeNotFoundCall() }
+                    ) {
+                        Text(text = "Make 404 error api call")
+                    }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    var showImage by remember { mutableStateOf(false) }
+
+                    Button(
+                        onClick = {
+                            applicationContext.imageLoader.diskCache?.clear()
+                            showImage = !showImage
                         }
+                    ) {
+                        Text(text = if(showImage) "Hide image" else "Load image")
+                    }
 
-                        Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
 
-                        Button(
-                            onClick = { loadBitcoinPrice() }
-                        ) {
-                            Text(text = "Make 3 api calls")
+                    if(showImage) {
+                        AsyncImage(
+                            modifier = Modifier.fillMaxWidth(),
+                            model = "https://picsum.photos/1920/1080",
+                            contentDescription = null
+                        )
+                    }
+
+                    var showGif by remember { mutableStateOf(false) }
+
+                    Button(
+                        onClick = {
+                            applicationContext.imageLoader.diskCache?.clear()
+                            showGif = !showGif
                         }
+                    ) {
+                        Text(text = if(showGif) "Hide gif" else "Load gif")
+                    }
 
-                        Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
 
-                        Button(
-                            onClick = { makeNotFoundCall() }
-                        ) {
-                            Text(text = "Make 404 error api call")
-                        }
-
-                        Spacer(modifier = Modifier.height(16.dp))
-
-                        var showImage by remember { mutableStateOf(false) }
-
-                        Button(
-                            onClick = {
-                                applicationContext.imageLoader.diskCache?.clear()
-                                showImage = !showImage
-                            }
-                        ) {
-                            Text(text = if(showImage) "Hide image" else "Load image")
-                        }
-
-                        Spacer(modifier = Modifier.height(16.dp))
-
-                        if(showImage) {
-                            AsyncImage(
-                                modifier = Modifier.fillMaxWidth(),
-                                model = "https://images.unsplash.com/photo-1517345438041-cf88a04b4" +
-                                        "689?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlf" +
-                                        "Hx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80",
-                                contentDescription = null
-                            )
-                        }
+                    if(showGif) {
+                        AsyncImage(
+                            modifier = Modifier.fillMaxWidth(),
+                            model = "https://media.giphy.com/media/gw3IWyGkC0rsazTi/giphy.gif",
+                            contentDescription = null
+                        )
                     }
                 }
             }

@@ -17,5 +17,5 @@ internal data class NetworkRequestDetailsItem(
 }
 
 //image types supported by coil
-private val imageTypes = listOf(".jpg", ".jpeg", ".png", ".bmp", ".webp", ".heif")
-private val imageContentTypes = listOf("image/jpg", "image/jpeg", "image/png", "image/bmp", "image/webp", "image/heif")
+private val imageTypes = listOf(".jpg", ".jpeg", ".png", ".bmp", ".webp", ".heif", ".gif")
+private val imageContentTypes = listOf("image/jpg", "image/jpeg", "image/png", "image/bmp", "image/webp", "image/heif", "image/gif")

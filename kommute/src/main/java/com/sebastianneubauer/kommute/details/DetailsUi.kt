@@ -1,5 +1,6 @@
 package com.sebastianneubauer.kommute.details
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
@@ -27,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
@@ -37,6 +39,8 @@ import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
+import coil.compose.AsyncImagePainter
+import coil.compose.SubcomposeAsyncImage
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
@@ -216,10 +220,15 @@ private fun ResponseTab(
     Spacer(modifier = Modifier.height(8.dp))
 
     if(item.isImage) {
-        AsyncImage(
-            modifier = Modifier.fillMaxWidth(),
+        SubcomposeAsyncImage(
+            modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(1F),
             model = item.url,
-            contentDescription = null
+            alignment = Alignment.TopStart,
+            contentDescription = null,
+            loading = { ImagePlaceholder() },
+            error = { ImagePlaceholder() }
         )
     }
 }
@@ -348,6 +357,26 @@ private fun Headers(
                 Spacer(modifier = Modifier.height(4.dp))
             }
         }
+    }
+}
+
+@Composable
+private fun ImagePlaceholder() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = Color.LightGray)
+    ) {
+        Image(
+            modifier = Modifier
+                .fillMaxSize(0.5f)
+                .align(Alignment.Center),
+            painter = rememberVectorPainter(
+                ImageVector.vectorResource(R.drawable.ic_kommute_notification_icon)
+            ),
+            alpha = 0.2f,
+            contentDescription = null
+        )
     }
 }
 
