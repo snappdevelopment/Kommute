@@ -35,7 +35,7 @@ internal object KommuteNotification {
 
         val bubbleData = BubbleMetadata.Builder(
             bubbleIntent,
-            IconCompat.createWithResource(context, R.drawable.ic_kommute_notification_icon)
+            IconCompat.createWithResource(context, R.drawable.ic_kommute_icon)
         )
             .setDesiredHeight(600)
             .build()
@@ -51,7 +51,7 @@ internal object KommuteNotification {
             .setContentIntent(bubbleIntent)
             .setContentTitle(context.getString(R.string.kommute_notification_name))
             .setContentText(context.getString(R.string.kommute_notification_text))
-            .setSmallIcon(R.drawable.ic_kommute_notification_icon)
+            .setSmallIcon(R.drawable.ic_kommute_icon)
             .setBubbleMetadata(bubbleData)
             .setOnlyAlertOnce(true)
             .addPerson(person)
@@ -84,7 +84,7 @@ internal object KommuteNotification {
         val shortcut = ShortcutInfoCompat.Builder(context, shortcutId)
             .setLocusId(LocusIdCompat(shortcutId))
             .setShortLabel(shortcutId)
-            .setIcon(IconCompat.createWithResource(context, R.drawable.ic_kommute_notification_icon))
+            .setIcon(IconCompat.createWithResource(context, R.drawable.ic_kommute_icon))
             .setLongLived(true)
             .setPerson(person)
             .setIsConversation()

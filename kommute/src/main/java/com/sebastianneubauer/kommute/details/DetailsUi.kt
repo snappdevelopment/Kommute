@@ -29,7 +29,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -38,8 +37,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import coil.compose.AsyncImage
-import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -372,7 +369,7 @@ private fun ImagePlaceholder() {
                 .fillMaxSize(0.5f)
                 .align(Alignment.Center),
             painter = rememberVectorPainter(
-                ImageVector.vectorResource(R.drawable.ic_kommute_notification_icon)
+                ImageVector.vectorResource(R.drawable.ic_kommute_icon)
             ),
             alpha = 0.2f,
             contentDescription = null
