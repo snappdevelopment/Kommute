@@ -1,5 +1,6 @@
 package com.sebastianneubauer.kommute.details
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
@@ -27,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -35,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.SubcomposeAsyncImage
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
@@ -156,7 +159,7 @@ private fun Content(
                     .padding(16.dp)
             ) {
                 when(pageIndex) {
-                    0 -> ResponseTab(networkRequestDetailsItem.responseBody)
+                    0 -> ResponseTab(networkRequestDetailsItem)
                     1 -> RequestTab(networkRequestDetailsItem.requestBody)
                     2 -> HeadersTab(
                         url = networkRequestDetailsItem.url,
@@ -188,20 +191,43 @@ private enum class SelectedTab(val index: Int) {
 
 @Composable
 private fun ResponseTab(
-    responseBody: String?
+    item: NetworkRequestDetailsItem
 ) {
     Headline(text = stringResource(R.string.kommute_details_headline_response_body))
 
     Spacer(modifier = Modifier.height(8.dp))
 
-    Text(
-        modifier = Modifier
-            .horizontalScroll(rememberScrollState())
-            .widthIn(max = LocalConfiguration.current.screenWidthDp.dp * 2),
-        text = responseBody ?: stringResource(R.string.kommute_details_response_body_empty),
-        style = MaterialTheme.typography.bodyMedium,
-        color = Color.DarkGray
-    )
+    val responseText = when {
+        item.responseBody != null -> item.responseBody
+        !item.isImage -> stringResource(R.string.kommute_details_response_body_empty)
+        else -> null
+    }
+
+    if(responseText != null) {
+        Text(
+            modifier = Modifier
+                .horizontalScroll(rememberScrollState())
+                .widthIn(max = LocalConfiguration.current.screenWidthDp.dp * 2),
+            text = responseText,
+            style = MaterialTheme.typography.bodyMedium,
+            color = Color.DarkGray
+        )
+    }
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    if(item.isImage) {
+        SubcomposeAsyncImage(
+            modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(1F),
+            model = item.url,
+            alignment = Alignment.TopStart,
+            contentDescription = null,
+            loading = { ImagePlaceholder() },
+            error = { ImagePlaceholder() }
+        )
+    }
 }
 
 @Composable
@@ -328,6 +354,26 @@ private fun Headers(
                 Spacer(modifier = Modifier.height(4.dp))
             }
         }
+    }
+}
+
+@Composable
+private fun ImagePlaceholder() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = Color.LightGray)
+    ) {
+        Image(
+            modifier = Modifier
+                .fillMaxSize(0.5f)
+                .align(Alignment.Center),
+            painter = rememberVectorPainter(
+                ImageVector.vectorResource(R.drawable.ic_kommute_icon)
+            ),
+            alpha = 0.2f,
+            contentDescription = null
+        )
     }
 }
 

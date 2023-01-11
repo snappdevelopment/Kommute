@@ -29,6 +29,7 @@ dependencies {
     implementation libs.androidx.activity.compose
 
     implementation libs.okhttp
+    implementation libs.coil
 
     implementation libs.androidx.compose.compiler
     implementation libs.androidx.compose.ui

@@ -1,6 +1,8 @@
 package com.sebastianneubauer.kommutedemo.network
 
 import android.content.Context
+import coil.ImageLoader
+import coil.disk.DiskCache
 import com.sebastianneubauer.kommute.Kommute
 import java.io.File
 import okhttp3.Cache
@@ -9,18 +11,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
 internal fun getRetrofit(context: Context): Retrofit {
-
-    val kommuteInterceptor = Kommute.getInstance().getInterceptor()
-
-    val cache = Cache(
-        directory = File(context.cacheDir, "http_cache"),
-        maxSize = 50L * 1024L * 1024L // 50 MiB
-    )
-
-    val httpClient = OkHttpClient.Builder()
-        .cache(cache)
-        .addInterceptor(kommuteInterceptor)
-        .build()
+    val httpClient = OkHttpClientFactory.getOkHttpClient(context)
 
     return Retrofit.Builder()
         .baseUrl("https://api.coindesk.com/")

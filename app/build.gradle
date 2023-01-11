@@ -70,6 +70,8 @@ dependencies {
     implementation libs.moshi
     implementation libs.androidx.compose.ui.tooling
     implementation libs.androidx.compose.ui.tooling.preview
+    implementation libs.coil
+    implementation libs.coil.gif
     ksp libs.moshi.codegen
 
     testImplementation libs.testing.junit
