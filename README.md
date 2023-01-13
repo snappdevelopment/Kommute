@@ -1,6 +1,6 @@
 # <img src="screenshots/kommuteIcon.png" height="25"> Kommute 
 
-![](https://img.shields.io/badge/Version-0.0.2-blue) ![](https://img.shields.io/badge/Kotlin-1.7.20-orange) ![](https://img.shields.io/badge/SDK-21+-brightgreen)
+![](https://img.shields.io/maven-central/v/com.sebastianneubauer/kommute) ![](https://img.shields.io/badge/Kotlin-1.7.20-blue) ![](https://img.shields.io/badge/SDK-21+-brightgreen)
 <br /><br />
 Kommute is a Android library to observe your apps network traffic while debugging.
 <br /><br />
@@ -24,8 +24,8 @@ Kommute is a debug tool. It comes with a `no-op` version, which should be used i
 
 ```groovy
 dependencies {
-    debugImplementation 'com.sebastianneubauer:kommute:0.0.2'
-    releaseImplementation 'com.sebastianneubauer:kommute-no-op:0.0.2'
+    debugImplementation 'com.sebastianneubauer:kommute:0.0.3'
+    releaseImplementation 'com.sebastianneubauer:kommute-no-op:0.0.3'
 }
 ```
 
