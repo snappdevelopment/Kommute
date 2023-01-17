@@ -2,7 +2,7 @@
 
 ![](https://img.shields.io/maven-central/v/com.sebastianneubauer/kommute) ![](https://img.shields.io/badge/Kotlin-1.7.20-blue) ![](https://img.shields.io/badge/SDK-21+-brightgreen)
 <br /><br />
-Kommute is a Android library to observe your apps network traffic while debugging.
+Kommute is an Android library to observe your apps network traffic while debugging.
 <br /><br />
 
 <p float="left">
@@ -20,16 +20,16 @@ The network traffic can be observed as long as the app lives, even while it is i
 
 ## Download
 
-Kommute is a debug tool. It comes with a `no-op` version, which should be used in release builds.
+Kommute is a debug tool. It comes with a `no-op` version, which should be used in release builds. See `maven-central` tag at the top for latest version.
 
 ```groovy
 dependencies {
-    debugImplementation 'com.sebastianneubauer:kommute:0.0.3'
-    releaseImplementation 'com.sebastianneubauer:kommute-no-op:0.0.3'
+    debugImplementation 'com.sebastianneubauer:kommute:latest-version'
+    releaseImplementation 'com.sebastianneubauer:kommute-no-op:latest-version'
 }
 ```
 
-## Usage
+## How to use
 
 Add Kommutes Interceptor to your OkHttp instance.
 
@@ -49,6 +49,31 @@ Kommute.getInstance().start(context)
 ```
 
 Click the expand icon on the notification to open Kommutes Bubble.
+
+## Images and Gifs
+
+Like regular API calls, Kommute can show calls to image and gif links and display the returned image/gif. To enable this behaviour, your image loading library needs to use the same OkHttpClient you use for networking. The following example shows the setup with [Coil](https://coil-kt.github.io/coil/).
+
+Get your pre-built OkHttpClient, which has Kommutes Interceptor applied and remove its cache. Then add it to your ImageLoader. See [DiskCache](https://coil-kt.github.io/coil/upgrading/#disk-cache) and [Custom OkHttpClient](https://coil-kt.github.io/coil/recipes/#using-a-custom-okhttpclient) for more info.
+
+```kotlin
+val okHttpClient = getOkHttpClient().newBuilder().cache(null).build()
+
+ImageLoader.Builder(context)
+        .okHttpClient(okHttpClient) //add your OkHttpClient
+        .components {               //add support for gifs
+            if (SDK_INT >= 28) {
+                add(ImageDecoderDecoder.Factory())
+            } else {
+                add(GifDecoder.Factory())
+            }
+        }
+        .build()
+```
+
+After providing the Imageloader through the [ImageLoadingFactory](https://coil-kt.github.io/coil/getting_started/#image-loaders), it is ready to use with Coils ImageRequest or AsyncImage.
+
+Note: If your ImageLoader uses a cache, subsequent requests to the same image might not be shown in Kommute.
 
 ## Tech Stack
 
