@@ -35,6 +35,8 @@ moshi = "1.14.0"
 junit = "4.13.2"
 turbine = "0.12.1"
 json = "20220924"
+spotless = "6.13.0"
+ktlint = "0.48.1"
 
 
 [libraries]
@@ -85,3 +87,4 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 publish = { id = "com.vanniktech.maven.publish", version.ref = "publish" }
 api-validator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version.ref = "api-validator" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }

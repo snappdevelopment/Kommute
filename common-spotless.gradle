@@ -1,0 +1,8 @@
+spotless {
+//    ratchetFrom 'origin/main'
+
+    kotlin {
+        ktlint(libs.versions.ktlint.get())
+                .userData(['android': 'true'])
+    }
+}

@@ -2,9 +2,11 @@ plugins {
     alias libs.plugins.android.library
     alias libs.plugins.kotlin.android
     alias libs.plugins.publish
+    alias libs.plugins.spotless
 }
 
 apply from: "$rootProject.projectDir/common-android.gradle"
+apply from: "$rootProject.projectDir/common-spotless.gradle"
 
 android {
     kotlinOptions {
