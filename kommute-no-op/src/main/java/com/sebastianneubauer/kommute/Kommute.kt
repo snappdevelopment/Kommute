@@ -16,10 +16,10 @@ public interface Kommute {
     }
 }
 
-private class NoopKommute: Kommute {
+private class NoopKommute : Kommute {
 
     override fun start(context: Context) {
-        //noop
+        // noop
     }
 
     override fun getInterceptor(): Interceptor {

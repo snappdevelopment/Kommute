@@ -10,7 +10,7 @@ internal interface DateTimeFormatter {
     fun format(timestamp: Long): String
 }
 
-internal class LocalDateTimeFormatter: DateTimeFormatter {
+internal class LocalDateTimeFormatter : DateTimeFormatter {
     override fun format(timestamp: Long): String {
         val instant = Instant.ofEpochMilli(timestamp)
         val localDateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault())

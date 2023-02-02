@@ -11,7 +11,7 @@ internal sealed class NetworkRequestListItem {
         override val dateTime: String,
         override val url: String,
         override val method: String,
-    ): NetworkRequestListItem()
+    ) : NetworkRequestListItem()
 
     internal data class Finished(
         override val id: Long,
@@ -21,7 +21,7 @@ internal sealed class NetworkRequestListItem {
 
         val duration: String,
         val statusCode: Int,
-    ): NetworkRequestListItem()
+    ) : NetworkRequestListItem()
 
     internal data class Failed(
         override val id: Long,
@@ -30,5 +30,5 @@ internal sealed class NetworkRequestListItem {
         override val method: String,
 
         val errorMessage: String
-    ): NetworkRequestListItem()
+    ) : NetworkRequestListItem()
 }

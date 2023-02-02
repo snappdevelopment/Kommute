@@ -1,7 +1,9 @@
 package com.sebastianneubauer.kommute.logging
 
 import androidx.annotation.VisibleForTesting
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.onStart
 
 internal interface NetworkDataRepository {
     /**
@@ -62,7 +64,7 @@ internal class InMemoryNetworkDataRepository : NetworkDataRepository {
     override fun update(data: NetworkRequest) {
         synchronized(lock) {
             val index = networkRequests.indexOfFirst { it.id == data.id }
-            if(index != -1) {
+            if (index != -1) {
                 networkRequests[index] = data
                 updates.tryEmit(networkRequests.toList())
             }

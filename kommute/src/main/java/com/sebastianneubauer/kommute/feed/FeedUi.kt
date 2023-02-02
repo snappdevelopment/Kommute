@@ -8,7 +8,19 @@ import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -42,7 +54,6 @@ import kotlinx.coroutines.launch
 @Composable
 internal fun FeedUi(
     viewModelFactory: FeedViewModel.Factory,
-    onBackClick: () -> Unit,
     onRequestClick: (Long) -> Unit
 ) {
     val viewModel: FeedViewModel = viewModel(factory = viewModelFactory)
@@ -66,7 +77,7 @@ private fun Feed(
             .fillMaxSize()
             .background(color = Color.White)
     ) {
-        when(state) {
+        when (state) {
             is Content -> FeedList(state, onRequestClick, onClearClick)
             is Loading -> Loading()
             is Empty -> Empty()
@@ -106,7 +117,7 @@ private fun FeedList(
                 itemsIndexed(items = state.requests, key = { _, item -> item.id }) { index, item ->
                     Request(item = item, onRequestClick = onRequestClick)
 
-                    if(index < state.requests.size - 1) {
+                    if (index < state.requests.size - 1) {
                         Divider(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -182,7 +193,7 @@ private fun Request(
 
             Spacer(modifier = Modifier.width(8.dp))
 
-            when(item) {
+            when (item) {
                 is NetworkRequestListItem.Ongoing -> {
                     CircularProgressIndicator(
                         modifier = Modifier
@@ -196,7 +207,7 @@ private fun Request(
                     Text(
                         text = item.statusCode.toString(),
                         style = MaterialTheme.typography.bodyMedium,
-                        color = if(item.statusCode >= 400) Color.Red else Color.DarkGray
+                        color = if (item.statusCode >= 400) Color.Red else Color.DarkGray
                     )
 
                     Spacer(modifier = Modifier.width(8.dp))
@@ -225,7 +236,7 @@ private fun Request(
             overflow = TextOverflow.Ellipsis
         )
 
-        if(item is NetworkRequestListItem.Failed) {
+        if (item is NetworkRequestListItem.Failed) {
             Spacer(modifier = Modifier.height(4.dp))
 
             Text(
@@ -278,7 +289,7 @@ private fun FeedPreview() {
                     dateTime = "15:13:24",
                     method = "GET",
                     url = "www.example.com/api?id=5&text=Lorem ipsum dolor sit amet, consectetur adipiscing" +
-                            " elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                        " elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
                 ),
                 NetworkRequestListItem.Finished(
                     id = 1L,
@@ -287,14 +298,14 @@ private fun FeedPreview() {
                     statusCode = 200,
                     duration = "25ms",
                     url = "www.example.com/api?id=5&text=Lorem ipsum dolor sit amet, consectetur adipiscing " +
-                            "elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                        "elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
                 ),
                 NetworkRequestListItem.Failed(
                     id = 2L,
                     dateTime = "15:13:24",
                     method = "GET",
                     url = "www.example.com/api?id=5&text=Lorem ipsum dolor sit amet, consectetur adipiscing" +
-                            " elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                        " elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
                     errorMessage = "This is an error message, because the api call failed",
                 ),
             )

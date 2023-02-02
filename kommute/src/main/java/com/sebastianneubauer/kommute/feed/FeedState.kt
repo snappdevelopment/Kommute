@@ -4,8 +4,8 @@ internal sealed class FeedState
 
 internal data class Content(
     val requests: List<NetworkRequestListItem>
-): FeedState()
+) : FeedState()
 
-internal object Loading: FeedState()
+internal object Loading : FeedState()
 
-internal object Empty: FeedState()
+internal object Empty : FeedState()

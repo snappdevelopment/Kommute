@@ -7,9 +7,9 @@ import com.sebastianneubauer.kommute.details.NetworkRequestDetailsItem
 import com.sebastianneubauer.kommute.helper.FakeNetworkDataRepository
 import com.sebastianneubauer.kommute.helper.MainDispatcherRule
 import com.sebastianneubauer.kommute.logging.NetworkRequest
-import org.junit.Assert.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 

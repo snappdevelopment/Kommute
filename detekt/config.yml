@@ -1,0 +1,22 @@
+# Overwritten from default config at:
+# https://github.com/detekt/detekt/blob/main/detekt-core/src/main/resources/default-detekt-config.yml
+config:
+  validation: true
+
+naming:
+  FunctionNaming:
+    functionPattern: '[a-zA-Z][a-zA-Z0-9]*'
+
+complexity:
+  TooManyFunctions:
+    thresholdInFiles: 20
+  LongMethod:
+    threshold: 80
+
+style:
+  MagicNumber:
+    active: false
+  UnusedPrivateMember:
+    ignoreAnnotated: ['Preview']
+
+

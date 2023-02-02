@@ -33,7 +33,6 @@ internal class KommuteActivity : ComponentActivity() {
             ) {
                 feedGraph(
                     viewModelFactory = feedViewModelFactory,
-                    onBackClick = { navController.popBackStack() },
                     onRequestClick = { navController.navigate("${DetailsDestination.route}/$it") }
                 )
                 detailsGraph(

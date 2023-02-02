@@ -15,7 +15,7 @@ internal sealed class NetworkRequest {
         override val method: String,
         override val requestBody: String?,
         override val requestHeaders: Map<String, List<String>>,
-    ): NetworkRequest()
+    ) : NetworkRequest()
 
     internal data class Finished(
         override val id: Long,
@@ -29,7 +29,7 @@ internal sealed class NetworkRequest {
         val statusCode: Int,
         val responseBody: String?,
         val responseHeaders: Map<String, List<String>>,
-    ): NetworkRequest()
+    ) : NetworkRequest()
 
     internal data class Failed(
         override val id: Long,
@@ -40,5 +40,5 @@ internal sealed class NetworkRequest {
         override val requestHeaders: Map<String, List<String>>,
 
         val errorMessage: String
-    ): NetworkRequest()
+    ) : NetworkRequest()
 }

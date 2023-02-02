@@ -1,7 +1,5 @@
 package com.sebastianneubauer.kommute
 
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationCompat.BubbleMetadata
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -11,6 +9,8 @@ import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationCompat.BubbleMetadata
 import androidx.core.app.Person
 import androidx.core.content.LocusIdCompat
 import androidx.core.content.pm.ShortcutInfoCompat
@@ -23,7 +23,6 @@ internal object KommuteNotification {
     private const val CHANNEL_ID = "kommute_notification"
 
     fun send(context: Context) {
-
         val intentFlag = when {
             Build.VERSION.SDK_INT >= 33 -> FLAG_MUTABLE or FLAG_UPDATE_CURRENT
             Build.VERSION.SDK_INT >= 23 -> FLAG_IMMUTABLE or FLAG_UPDATE_CURRENT
