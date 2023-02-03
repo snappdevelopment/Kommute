@@ -4,6 +4,13 @@ Instructions on how to develop in this project.
 
 ### Detekt
 
+Install pre-commit hook for auto formatting:
+
+Run the following command from the project root.
+```
+.github/hooks/install-pre-commit.sh
+```
+
 Run Detekt on all library modules:
 
 ```
