@@ -5,8 +5,8 @@ if [ ! -f "$(pwd)/README.md" ]; then
   exit 1
 fi
 
-SOURCE_FILE="$(pwd)/.github/hooks/pre-commit.sh"
-DESTINATION_FILE="$(pwd)/.git/hooks/pre-commit.sh"
+SOURCE_FILE="$(pwd)/.github/hooks/pre-commit"
+DESTINATION_FILE="$(pwd)/.git/hooks/pre-commit"
 
 cp $SOURCE_FILE $DESTINATION_FILE
 chmod +x $DESTINATION_FILE
