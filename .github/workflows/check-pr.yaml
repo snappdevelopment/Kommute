@@ -59,8 +59,8 @@ jobs:
 
   detekt:
     runs-on: ubuntu-latest
-      needs: [ assembleDebug, assembleRelease ]
+    needs: [ assembleDebug, assembleRelease ]
 
-      steps:
-        - name: Run detekt
-          run: ./gradlew detektAll
+    steps:
+      - name: Run detekt
+        run: ./gradlew detektAll
