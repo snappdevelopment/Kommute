@@ -1,17 +1,20 @@
 package com.sebastianneubauer.kommute.feed
 
-import androidx.lifecycle.*
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.sebastianneubauer.kommute.logging.NetworkDataRepository
 import com.sebastianneubauer.kommute.logging.NetworkRequest
 import com.sebastianneubauer.kommute.util.DateTimeFormatter
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 
-@OptIn(ExperimentalCoroutinesApi::class)
 internal class FeedViewModel(
     private val repository: NetworkDataRepository,
     private val dateTimeFormatter: DateTimeFormatter
-): ViewModel() {
+) : ViewModel() {
 
     val state: StateFlow<FeedState> = repository.requests
         .map { it.toFeedState() }
@@ -25,7 +28,7 @@ internal class FeedViewModel(
         val items = this
             .reversed()
             .map {
-                when(it) {
+                when (it) {
                     is NetworkRequest.Ongoing -> NetworkRequestListItem.Ongoing(
                         id = it.id,
                         dateTime = dateTimeFormatter.format(it.timestampMillis),
@@ -50,7 +53,7 @@ internal class FeedViewModel(
                 }
             }
 
-        return if(items.isEmpty()) Empty else Content(items)
+        return if (items.isEmpty()) Empty else Content(items)
     }
 
     fun clearClicked() {
@@ -60,7 +63,7 @@ internal class FeedViewModel(
     class Factory(
         private val repository: NetworkDataRepository,
         private val dateTimeFormatter: DateTimeFormatter
-    ): ViewModelProvider.Factory {
+    ) : ViewModelProvider.Factory {
         @Suppress("Unchecked_cast")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return FeedViewModel(repository, dateTimeFormatter) as T

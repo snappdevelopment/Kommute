@@ -71,7 +71,7 @@ internal class InMemoryNetworkDataRepositoryTest {
 
             assertEquals(listOf(ongoingRequest1), awaitItem())
 
-            //updates ongoing request
+            // updates ongoing request
             underTest.update(finishedRequest1)
 
             assertEquals(listOf(finishedRequest1), awaitItem())

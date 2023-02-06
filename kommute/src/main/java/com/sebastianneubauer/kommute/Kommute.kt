@@ -1,8 +1,8 @@
 package com.sebastianneubauer.kommute
 
 import android.content.Context
-import com.sebastianneubauer.kommute.logging.NetworkDataRepository
 import com.sebastianneubauer.kommute.logging.KommuteInterceptor
+import com.sebastianneubauer.kommute.logging.NetworkDataRepository
 import okhttp3.Interceptor
 
 public interface Kommute {
@@ -36,7 +36,7 @@ public interface Kommute {
 
 private class AndroidKommute(
     private val repository: NetworkDataRepository
-): Kommute {
+) : Kommute {
 
     override fun start(context: Context) {
         KommuteNotification.send(context)

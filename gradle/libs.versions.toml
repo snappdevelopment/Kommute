@@ -35,6 +35,7 @@ moshi = "1.14.0"
 junit = "4.13.2"
 turbine = "0.12.1"
 json = "20220924"
+detekt = "1.22.0"
 
 
 [libraries]
@@ -75,6 +76,7 @@ testing-turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine"
 testing-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 testing-json = { module = "org.json:json", version.ref = "json" }
 
+detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
 publish = { module = "com.vanniktech:gradle-maven-publish-plugin", version.ref = "publish" }
 
 
@@ -85,3 +87,4 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 publish = { id = "com.vanniktech.maven.publish", version.ref = "publish" }
 api-validator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version.ref = "api-validator" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }

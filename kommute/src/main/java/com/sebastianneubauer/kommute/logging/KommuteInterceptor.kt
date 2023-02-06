@@ -5,6 +5,7 @@ import okhttp3.Request
 import okhttp3.Response
 import okio.Buffer
 import okio.GzipSource
+import java.io.IOException
 import java.util.Random
 import java.util.concurrent.TimeUnit
 
@@ -36,7 +37,7 @@ internal class KommuteInterceptor(
         val response: Response
         try {
             response = chain.proceed(request)
-        } catch (e: Exception) {
+        } catch (e: IOException) {
             val failedNetworkRequest = NetworkRequest.Failed(
                 id = id,
                 timestampMillis = timeStamp,

@@ -10,9 +10,9 @@ import com.sebastianneubauer.kommute.helper.FakeDateTimeFormatter
 import com.sebastianneubauer.kommute.helper.FakeNetworkDataRepository
 import com.sebastianneubauer.kommute.helper.MainDispatcherRule
 import com.sebastianneubauer.kommute.logging.NetworkRequest
-import org.junit.Assert.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 
@@ -86,7 +86,12 @@ internal class FeedViewModelTest {
             val contentState = Content(
                 listOf(
                     NetworkRequestListItem.Finished(
-                        id = 0, dateTime = "", url = "", method = "", duration = "0ms", statusCode = 0
+                        id = 0,
+                        dateTime = "",
+                        url = "",
+                        method = "",
+                        duration = "0ms",
+                        statusCode = 0
                     ),
                 )
             )
@@ -141,10 +146,20 @@ internal class FeedViewModelTest {
             val contentState = Content(
                 listOf(
                     NetworkRequestListItem.Finished(
-                        id = 1, dateTime = "", url = "", method = "", duration = "0ms", statusCode = 0
+                        id = 1,
+                        dateTime = "",
+                        url = "",
+                        method = "",
+                        duration = "0ms",
+                        statusCode = 0
                     ),
                     NetworkRequestListItem.Finished(
-                        id = 0, dateTime = "", url = "", method = "", duration = "0ms", statusCode = 0
+                        id = 0,
+                        dateTime = "",
+                        url = "",
+                        method = "",
+                        duration = "0ms",
+                        statusCode = 0
                     ),
                 )
             )
@@ -156,7 +171,7 @@ internal class FeedViewModelTest {
     }
 
     @Test
-    fun `updating a network request, updates the state`() = runTest {
+    fun `updating a network request updates the state`() = runTest {
         underTest.state.test {
             assertEquals(Loading, awaitItem())
 
@@ -199,7 +214,12 @@ internal class FeedViewModelTest {
             val contentState = Content(
                 listOf(
                     NetworkRequestListItem.Finished(
-                        id = 0, dateTime = "", url = "", method = "", duration = "0ms", statusCode = 0
+                        id = 0,
+                        dateTime = "",
+                        url = "",
+                        method = "",
+                        duration = "0ms",
+                        statusCode = 0
                     ),
                 )
             )
@@ -213,5 +233,4 @@ internal class FeedViewModelTest {
             expectNoEvents()
         }
     }
-
 }

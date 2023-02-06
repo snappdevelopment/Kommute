@@ -1,16 +1,19 @@
 package com.sebastianneubauer.kommute.details
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.sebastianneubauer.kommute.logging.NetworkDataRepository
 import com.sebastianneubauer.kommute.logging.NetworkRequest
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.stateIn
 import org.json.JSONObject
 
 internal class DetailsViewModel(
     private val repository: NetworkDataRepository
-): ViewModel() {
+) : ViewModel() {
 
     fun state(requestId: Long): StateFlow<DetailsState> = flowOf(
         repository.request(requestId).toDetailsState()
@@ -18,7 +21,7 @@ internal class DetailsViewModel(
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), DetailsState.Initial)
 
     private fun NetworkRequest?.toDetailsState(): DetailsState {
-        return if(this == null) {
+        return if (this == null) {
             DetailsState.Error
         } else {
             DetailsState.Content(
@@ -36,7 +39,7 @@ internal class DetailsViewModel(
             it.value.reduce { acc, s -> "$acc, $s" }
         }
 
-        return when(this) {
+        return when (this) {
             is NetworkRequest.Finished -> {
                 val formattedResponseBody = responseBody?.runCatching {
                     JSONObject(this).toString(4)
@@ -73,7 +76,7 @@ internal class DetailsViewModel(
 
     class Factory(
         private val repository: NetworkDataRepository,
-    ): ViewModelProvider.Factory {
+    ) : ViewModelProvider.Factory {
         @Suppress("Unchecked_cast")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return DetailsViewModel(repository) as T
