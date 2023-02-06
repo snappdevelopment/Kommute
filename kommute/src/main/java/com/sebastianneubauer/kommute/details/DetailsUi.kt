@@ -3,7 +3,18 @@ package com.sebastianneubauer.kommute.details
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
@@ -74,8 +85,8 @@ private fun Details(
                 )
             }
 
-            Box(modifier = Modifier.fillMaxSize()){
-                when(val currentState = state) {
+            Box(modifier = Modifier.fillMaxSize()) {
+                when (val currentState = state) {
                     is DetailsState.Initial -> Loading()
                     is DetailsState.Content -> Content(currentState.networkRequestDetailsItem)
                     is DetailsState.Error -> Error()
@@ -156,7 +167,7 @@ private fun Content(
                     .verticalScroll(rememberScrollState())
                     .padding(16.dp)
             ) {
-                when(pageIndex) {
+                when (pageIndex) {
                     0 -> ResponseTab(networkRequestDetailsItem)
                     1 -> RequestTab(networkRequestDetailsItem.requestBody)
                     2 -> HeadersTab(
@@ -177,7 +188,7 @@ private enum class SelectedTab(val index: Int) {
 
     companion object {
         fun getTabForIndex(index: Int): SelectedTab {
-            return when(index) {
+            return when (index) {
                 0 -> RESPONSE
                 1 -> REQUEST
                 2 -> HEADERS
@@ -201,7 +212,7 @@ private fun ResponseTab(
         else -> null
     }
 
-    if(responseText != null) {
+    if (responseText != null) {
         Text(
             modifier = Modifier
                 .horizontalScroll(rememberScrollState())
@@ -214,7 +225,7 @@ private fun ResponseTab(
 
     Spacer(modifier = Modifier.height(8.dp))
 
-    if(item.isImage) {
+    if (item.isImage) {
         SubcomposeAsyncImage(
             modifier = Modifier
                 .fillMaxWidth()
@@ -313,7 +324,7 @@ private fun Headline(
 private fun Headers(
     headers: Map<String, String>?
 ) {
-    if(headers.isNullOrEmpty()) {
+    if (headers.isNullOrEmpty()) {
         Text(
             text = stringResource(R.string.kommute_details_headers_empty),
             style = MaterialTheme.typography.bodyMedium,
@@ -341,7 +352,7 @@ private fun Headers(
                 )
             }
 
-            if(index < headers.size - 1) {
+            if (index < headers.size - 1) {
                 Spacer(modifier = Modifier.height(4.dp))
 
                 Divider(
@@ -412,7 +423,7 @@ private fun ContentPreview() {
                         }
                     ]
                 }
-            """.trimIndent(),
+                """.trimIndent(),
                 responseBody = """
                 {
                     "data": [
@@ -423,7 +434,7 @@ private fun ContentPreview() {
                         }
                     ]
                 }
-            """.trimIndent(),
+                """.trimIndent(),
                 requestHeaders = mapOf(
                     "Content-Type" to "image/jpeg",
                     "Accept-Encoding" to "gzip"

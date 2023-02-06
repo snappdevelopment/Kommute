@@ -22,7 +22,7 @@ internal fun NavGraphBuilder.detailsGraph(
         arguments = listOf(navArgument(DetailsDestination.requestId) { type = NavType.LongType })
     ) { backStackEntry ->
         val requestId = backStackEntry.arguments?.getLong(DetailsDestination.requestId)
-        if(requestId == null) {
+        if (requestId == null) {
             onBackClick()
         }
 

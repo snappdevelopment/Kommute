@@ -2,11 +2,11 @@ package com.sebastianneubauer.kommute.details
 
 internal sealed class DetailsState {
 
-    object Initial: DetailsState()
+    object Initial : DetailsState()
 
     data class Content(
         val networkRequestDetailsItem: NetworkRequestDetailsItem
-    ): DetailsState()
+    ) : DetailsState()
 
-    object Error: DetailsState()
+    object Error : DetailsState()
 }
