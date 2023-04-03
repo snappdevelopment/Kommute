@@ -24,7 +24,7 @@ androidx-lifecycle-runtime-compose = "2.6.1"
 coroutines = "1.6.4"
 android-desugar = "1.2.2"
 
-accompanist = "0.28.0"
+accompanist = "0.30.0"
 
 okhttp = "4.10.0"
 coil = "2.2.2"
