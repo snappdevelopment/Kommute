@@ -22,7 +22,9 @@ androidx-lifecycle = "2.6.1"
 androidx-lifecycle-runtime-compose = "2.6.1"
 
 coroutines = "1.6.4"
+
 android-desugar = "1.2.3"
+jsontree = "1.0.0"
 
 okhttp = "4.10.0"
 coil = "2.3.0"
@@ -66,6 +68,8 @@ androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-
 androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidx-lifecycle-runtime-compose" }
 
 android-desugar = { module = "com.android.tools:desugar_jdk_libs", version.ref = "android-desugar" }
+
+jsontree = { module = "com.sebastianneubauer.jsontree:jsontree", version.ref = "jsontree" }
 
 testing-junit = { module = "junit:junit", version.ref = "junit" }
 testing-turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
