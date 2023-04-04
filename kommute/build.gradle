@@ -49,8 +49,6 @@ dependencies {
     implementation libs.androidx.lifecycle.viewmodel.compose
     implementation libs.androidx.lifecycle.runtime.compose
 
-    implementation libs.accompanist.pager
-
     coreLibraryDesugaring libs.android.desugar
 
     testImplementation libs.testing.junit
