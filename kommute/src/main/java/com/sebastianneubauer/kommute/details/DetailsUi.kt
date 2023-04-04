@@ -41,12 +41,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.ImageLoader
 import coil.compose.SubcomposeAsyncImage
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -59,17 +61,19 @@ import kotlinx.coroutines.launch
 internal fun DetailsUi(
     requestId: Long,
     viewModelFactory: DetailsViewModel.Factory,
+    imageLoader: ImageLoader,
     onBackClicked: () -> Unit
 ) {
     val viewModel: DetailsViewModel = viewModel(factory = viewModelFactory)
     val state by viewModel.state(requestId).collectAsStateWithLifecycle()
 
-    Details(state, onBackClicked)
+    Details(state, imageLoader, onBackClicked)
 }
 
 @Composable
 private fun Details(
     state: DetailsState,
+    imageLoader: ImageLoader,
     onBackClicked: () -> Unit
 ) {
     Box(
@@ -88,7 +92,10 @@ private fun Details(
             Box(modifier = Modifier.fillMaxSize()) {
                 when (val currentState = state) {
                     is DetailsState.Initial -> Loading()
-                    is DetailsState.Content -> Content(currentState.networkRequestDetailsItem)
+                    is DetailsState.Content -> Content(
+                        currentState.networkRequestDetailsItem,
+                        imageLoader
+                    )
                     is DetailsState.Error -> Error()
                 }
             }
@@ -99,11 +106,13 @@ private fun Details(
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 private fun Content(
-    networkRequestDetailsItem: NetworkRequestDetailsItem
+    networkRequestDetailsItem: NetworkRequestDetailsItem,
+    imageLoader: ImageLoader,
 ) {
     val coroutineScope = rememberCoroutineScope()
     var selectedTab by remember { mutableStateOf(SelectedTab.RESPONSE) }
     val pagerState = rememberPagerState(selectedTab.index)
+
     LaunchedEffect(pagerState) {
         snapshotFlow { pagerState.currentPage }
             .distinctUntilChanged()
@@ -168,7 +177,7 @@ private fun Content(
                     .padding(16.dp)
             ) {
                 when (pageIndex) {
-                    0 -> ResponseTab(networkRequestDetailsItem)
+                    0 -> ResponseTab(networkRequestDetailsItem, imageLoader)
                     1 -> RequestTab(networkRequestDetailsItem.requestBody)
                     2 -> HeadersTab(
                         url = networkRequestDetailsItem.url,
@@ -200,7 +209,8 @@ private enum class SelectedTab(val index: Int) {
 
 @Composable
 private fun ResponseTab(
-    item: NetworkRequestDetailsItem
+    item: NetworkRequestDetailsItem,
+    imageLoader: ImageLoader,
 ) {
     Headline(text = stringResource(R.string.kommute_details_headline_response_body))
 
@@ -231,6 +241,7 @@ private fun ResponseTab(
                 .fillMaxWidth()
                 .aspectRatio(1F),
             model = item.url,
+            imageLoader = imageLoader,
             alignment = Alignment.TopStart,
             contentDescription = null,
             loading = { ImagePlaceholder() },
@@ -445,6 +456,7 @@ private fun ContentPreview() {
                 ),
             )
         ),
+        imageLoader = ImageLoader(LocalContext.current),
         onBackClicked = {}
     )
 }
@@ -452,11 +464,19 @@ private fun ContentPreview() {
 @Composable
 @Preview
 private fun ErrorPreview() {
-    Details(state = DetailsState.Error, onBackClicked = {})
+    Details(
+        state = DetailsState.Error,
+        imageLoader = ImageLoader(LocalContext.current),
+        onBackClicked = {}
+    )
 }
 
 @Composable
 @Preview
 private fun LoadingPreview() {
-    Details(state = DetailsState.Initial, onBackClicked = {})
+    Details(
+        state = DetailsState.Initial,
+        imageLoader = ImageLoader(LocalContext.current),
+        onBackClicked = {}
+    )
 }

@@ -4,6 +4,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import coil.ImageLoader
 import com.sebastianneubauer.kommute.details.DetailsUi
 import com.sebastianneubauer.kommute.details.DetailsViewModel
 import com.sebastianneubauer.kommute.navigation.NavigationDestination
@@ -15,6 +16,7 @@ internal object DetailsDestination : NavigationDestination {
 
 internal fun NavGraphBuilder.detailsGraph(
     viewModelFactory: DetailsViewModel.Factory,
+    imageLoader: ImageLoader,
     onBackClick: () -> Unit
 ) {
     composable(
@@ -26,6 +28,6 @@ internal fun NavGraphBuilder.detailsGraph(
             onBackClick()
         }
 
-        DetailsUi(requestId!!, viewModelFactory, onBackClick)
+        DetailsUi(requestId!!, viewModelFactory, imageLoader, onBackClick)
     }
 }

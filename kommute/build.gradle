@@ -30,6 +30,7 @@ dependencies {
 
     implementation libs.okhttp
     implementation libs.coil
+    implementation libs.coil.gif
 
     implementation libs.androidx.compose.compiler
     implementation libs.androidx.compose.ui
