@@ -170,6 +170,7 @@ private fun Content(
 
         HorizontalPager(
             pageCount = 3,
+            beyondBoundsPageCount = 2,
             state = pagerState
         ) { pageIndex ->
             Column(
