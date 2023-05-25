@@ -49,6 +49,8 @@ dependencies {
     implementation libs.androidx.lifecycle.viewmodel.compose
     implementation libs.androidx.lifecycle.runtime.compose
 
+    implementation libs.jsontree
+    
     coreLibraryDesugaring libs.android.desugar
 
     testImplementation libs.testing.junit

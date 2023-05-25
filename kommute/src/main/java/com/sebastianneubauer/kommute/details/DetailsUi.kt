@@ -53,6 +53,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.ImageLoader
 import coil.compose.SubcomposeAsyncImage
+import com.sebastianneubauer.jsontree.JsonTree
+import com.sebastianneubauer.jsontree.TreeState
 import com.sebastianneubauer.kommute.R
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
@@ -168,6 +170,7 @@ private fun Content(
 
         HorizontalPager(
             pageCount = 3,
+            beyondBoundsPageCount = 2,
             state = pagerState
         ) { pageIndex ->
             Column(
@@ -222,11 +225,20 @@ private fun ResponseTab(
         else -> null
     }
 
-    if (responseText != null) {
+    var isNotJson by remember(responseText) { mutableStateOf(false) }
+
+    JsonTree(
+        modifier = Modifier
+            .horizontalScroll(rememberScrollState())
+            .widthIn(max = LocalConfiguration.current.screenWidthDp.dp * 2),
+        initialState = TreeState.EXPANDED,
+        json = responseText ?: "",
+        textStyle = MaterialTheme.typography.bodyMedium,
+        onError = { isNotJson = true }
+    )
+
+    if (responseText != null && isNotJson) {
         Text(
-            modifier = Modifier
-                .horizontalScroll(rememberScrollState())
-                .widthIn(max = LocalConfiguration.current.screenWidthDp.dp * 2),
             text = responseText,
             style = MaterialTheme.typography.bodyMedium,
             color = Color.DarkGray
@@ -258,14 +270,25 @@ private fun RequestTab(
 
     Spacer(modifier = Modifier.height(8.dp))
 
-    Text(
+    var isNotJson by remember(requestBody) { mutableStateOf(false) }
+
+    JsonTree(
         modifier = Modifier
             .horizontalScroll(rememberScrollState())
             .widthIn(max = LocalConfiguration.current.screenWidthDp.dp * 2),
-        text = requestBody ?: stringResource(R.string.kommute_details_request_body_empty),
-        style = MaterialTheme.typography.bodyMedium,
-        color = Color.DarkGray
+        initialState = TreeState.EXPANDED,
+        json = requestBody ?: "",
+        textStyle = MaterialTheme.typography.bodyMedium,
+        onError = { isNotJson = true }
     )
+
+    if (isNotJson) {
+        Text(
+            text = requestBody ?: stringResource(R.string.kommute_details_request_body_empty),
+            style = MaterialTheme.typography.bodyMedium,
+            color = Color.DarkGray
+        )
+    }
 }
 
 @Composable
@@ -430,7 +453,7 @@ private fun ContentPreview() {
                         {
                             "id": "62d19ae39874bff5d95efb89",
                             "index": 0,
-                            "isActive": false,
+                            "isActive": false
                         }
                     ]
                 }
@@ -441,7 +464,7 @@ private fun ContentPreview() {
                         {
                             "id": "62d19ae39874bff5d95efb89",
                             "index": 0,
-                            "isActive": false,
+                            "isActive": false
                         }
                     ]
                 }
