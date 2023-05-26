@@ -7,7 +7,7 @@ java = "1.8"
 gradle-plugin = "7.4.2"
 kotlin = "1.8.21"
 publish = "0.25.1"
-api-validator = "0.13.0"
+api-validator = "0.13.1"
 ksp = "1.8.21-1.0.11"
 
 androidx-core = "1.9.0"
