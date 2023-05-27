@@ -26,7 +26,7 @@ coroutines = "1.6.4"
 android-desugar = "1.2.3"
 jsontree = "1.0.1"
 
-okhttp = "4.10.0"
+okhttp = "4.11.0"
 coil = "2.4.0"
 retrofit = "2.9.0"
 
