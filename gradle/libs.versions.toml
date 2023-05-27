@@ -35,7 +35,7 @@ moshi = "1.14.0"
 junit = "4.13.2"
 turbine = "0.13.0"
 json = "20230227"
-detekt = "1.22.0"
+detekt = "1.23.0"
 
 
 [libraries]
