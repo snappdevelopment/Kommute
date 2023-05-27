@@ -89,6 +89,7 @@ Note: If your ImageLoader uses a cache, subsequent requests to the same image mi
 - API validation
 - GitHub Actions
 - Gradle version catalog
+- [JsonTree](https://github.com/snappdevelopment/JsonTree)
 
 ## Attribution
 
