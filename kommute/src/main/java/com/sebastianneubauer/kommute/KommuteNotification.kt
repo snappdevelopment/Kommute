@@ -24,7 +24,7 @@ internal object KommuteNotification {
 
     fun send(context: Context) {
         val intentFlag = when {
-            Build.VERSION.SDK_INT >= 33 -> FLAG_MUTABLE or FLAG_UPDATE_CURRENT
+            Build.VERSION.SDK_INT >= 31 -> FLAG_MUTABLE or FLAG_UPDATE_CURRENT
             Build.VERSION.SDK_INT >= 23 -> FLAG_IMMUTABLE or FLAG_UPDATE_CURRENT
             else -> FLAG_UPDATE_CURRENT
         }
