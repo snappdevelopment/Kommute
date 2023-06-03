@@ -23,7 +23,7 @@ androidx-lifecycle-runtime-compose = "2.6.1"
 
 coroutines = "1.7.1"
 
-android-desugar = "1.2.3"
+android-desugar = "2.0.3"
 jsontree = "1.0.1"
 
 okhttp = "4.11.0"
