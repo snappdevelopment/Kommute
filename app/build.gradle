@@ -38,11 +38,14 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.toVersion(libs.versions.java.get())
-        targetCompatibility JavaVersion.toVersion(libs.versions.java.get())
+        sourceCompatibility JavaVersion.toVersion(libs.versions.java.target.get())
+        targetCompatibility JavaVersion.toVersion(libs.versions.java.target.get())
     }
     kotlinOptions {
-        jvmTarget = libs.versions.java.get()
+        jvmTarget = libs.versions.java.target.get()
+    }
+    kotlin {
+        jvmToolchain(libs.versions.java.toolchain.get().toInteger())
     }
     buildFeatures {
         compose true
@@ -78,4 +81,11 @@ dependencies {
 
     debugImplementation project(":kommute")
     releaseImplementation project(":kommute-no-op")
+}
+
+// forces KspKotlinCompile task to use java 11 instead of 17 for compatibility
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+    kotlinOptions {
+        jvmTarget = libs.versions.java.target.get().toString()
+    }
 }
