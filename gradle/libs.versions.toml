@@ -4,7 +4,8 @@ android-target = "33"
 
 # R8/D8 doesn't support sealed classes with Gradle 8 and JDK 17 yet.
 # https://issuetracker.google.com/issues/227160052
-java = "11"
+java-target = "11"
+java-toolchain = "17"
 
 gradle-plugin = "8.0.2"
 kotlin = "1.8.21"
