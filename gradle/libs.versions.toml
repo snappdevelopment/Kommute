@@ -9,7 +9,7 @@ java-toolchain = "17"
 
 gradle-plugin = "8.0.2"
 kotlin = "1.8.21"
-publish = "0.25.2"
+publish = "0.27.0"
 api-validator = "0.13.2"
 ksp = "1.8.21-1.0.11"
 
