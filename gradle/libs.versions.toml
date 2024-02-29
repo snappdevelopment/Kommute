@@ -7,7 +7,7 @@ android-target = "33"
 java-target = "11"
 java-toolchain = "17"
 
-gradle-plugin = "8.0.2"
+gradle-plugin = "8.3.0"
 kotlin = "1.8.21"
 publish = "0.25.2"
 api-validator = "0.13.2"
