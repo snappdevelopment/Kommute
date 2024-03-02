@@ -14,7 +14,7 @@ internal fun getRetrofit(context: Context): Retrofit {
     val httpClient = OkHttpClientFactory.getOkHttpClient(context)
 
     return Retrofit.Builder()
-        .baseUrl("https://api.coindesk.com/")
+        .baseUrl("https://dummyjson.com/")
         .client(httpClient)
         .addConverterFactory(MoshiConverterFactory.create())
         .build()

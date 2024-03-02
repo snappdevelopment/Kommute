@@ -15,13 +15,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -43,7 +42,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -92,10 +90,10 @@ private fun Details(
             }
 
             Box(modifier = Modifier.fillMaxSize()) {
-                when (val currentState = state) {
+                when (state) {
                     is DetailsState.Initial -> Loading()
                     is DetailsState.Content -> Content(
-                        currentState.networkRequestDetailsItem,
+                        state.networkRequestDetailsItem,
                         imageLoader
                     )
                     is DetailsState.Error -> Error()
@@ -113,7 +111,10 @@ private fun Content(
 ) {
     val coroutineScope = rememberCoroutineScope()
     var selectedTab by remember { mutableStateOf(SelectedTab.RESPONSE) }
-    val pagerState = rememberPagerState(selectedTab.index)
+    val pagerState = rememberPagerState(
+        initialPage = selectedTab.index,
+        pageCount = { SelectedTab.values().size }
+    )
 
     LaunchedEffect(pagerState) {
         snapshotFlow { pagerState.currentPage }
@@ -169,14 +170,12 @@ private fun Content(
         }
 
         HorizontalPager(
-            pageCount = 3,
             beyondBoundsPageCount = 2,
             state = pagerState
         ) { pageIndex ->
-            Column(
+            Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
                     .padding(16.dp)
             ) {
                 when (pageIndex) {
@@ -215,50 +214,53 @@ private fun ResponseTab(
     item: NetworkRequestDetailsItem,
     imageLoader: ImageLoader,
 ) {
-    Headline(text = stringResource(R.string.kommute_details_headline_response_body))
+    Column {
+        Headline(text = stringResource(R.string.kommute_details_headline_response_body))
 
-    Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
-    val responseText = when {
-        item.responseBody != null -> item.responseBody
-        !item.isImage -> stringResource(R.string.kommute_details_response_body_empty)
-        else -> null
-    }
+        val responseText = when {
+            item.responseBody != null -> item.responseBody
+            !item.isImage -> stringResource(R.string.kommute_details_response_body_empty)
+            else -> null
+        }
 
-    var isNotJson by remember(responseText) { mutableStateOf(false) }
+        var isNotJson by remember(responseText) { mutableStateOf(false) }
 
-    JsonTree(
-        modifier = Modifier
-            .horizontalScroll(rememberScrollState())
-            .widthIn(max = LocalConfiguration.current.screenWidthDp.dp * 2),
-        initialState = TreeState.EXPANDED,
-        json = responseText ?: "",
-        textStyle = MaterialTheme.typography.bodyMedium,
-        onError = { isNotJson = true }
-    )
-
-    if (responseText != null && isNotJson) {
-        Text(
-            text = responseText,
-            style = MaterialTheme.typography.bodyMedium,
-            color = Color.DarkGray
+        JsonTree(
+            modifier = Modifier.horizontalScroll(rememberScrollState()),
+            initialState = TreeState.EXPANDED,
+            json = responseText ?: "",
+            textStyle = MaterialTheme.typography.bodyMedium,
+            onError = { isNotJson = true },
+            onLoading = {
+                Text(text = stringResource(R.string.kommute_details_body_loading))
+            }
         )
-    }
 
-    Spacer(modifier = Modifier.height(8.dp))
+        if (responseText != null && isNotJson) {
+            Text(
+                text = responseText,
+                style = MaterialTheme.typography.bodyMedium,
+                color = Color.DarkGray
+            )
+        }
 
-    if (item.isImage) {
-        SubcomposeAsyncImage(
-            modifier = Modifier
-                .fillMaxWidth()
-                .aspectRatio(1F),
-            model = item.url,
-            imageLoader = imageLoader,
-            alignment = Alignment.TopStart,
-            contentDescription = null,
-            loading = { ImagePlaceholder() },
-            error = { ImagePlaceholder() }
-        )
+        Spacer(modifier = Modifier.height(8.dp))
+
+        if (item.isImage) {
+            SubcomposeAsyncImage(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(1F),
+                model = item.url,
+                imageLoader = imageLoader,
+                alignment = Alignment.TopStart,
+                contentDescription = null,
+                loading = { ImagePlaceholder() },
+                error = { ImagePlaceholder() }
+            )
+        }
     }
 }
 
@@ -266,28 +268,31 @@ private fun ResponseTab(
 private fun RequestTab(
     requestBody: String?
 ) {
-    Headline(text = stringResource(R.string.kommute_details_headline_request_body))
+    Column {
+        Headline(text = stringResource(R.string.kommute_details_headline_request_body))
 
-    Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
-    var isNotJson by remember(requestBody) { mutableStateOf(false) }
+        var isNotJson by remember(requestBody) { mutableStateOf(false) }
 
-    JsonTree(
-        modifier = Modifier
-            .horizontalScroll(rememberScrollState())
-            .widthIn(max = LocalConfiguration.current.screenWidthDp.dp * 2),
-        initialState = TreeState.EXPANDED,
-        json = requestBody ?: "",
-        textStyle = MaterialTheme.typography.bodyMedium,
-        onError = { isNotJson = true }
-    )
-
-    if (isNotJson) {
-        Text(
-            text = requestBody ?: stringResource(R.string.kommute_details_request_body_empty),
-            style = MaterialTheme.typography.bodyMedium,
-            color = Color.DarkGray
+        JsonTree(
+            modifier = Modifier.horizontalScroll(rememberScrollState()),
+            initialState = TreeState.EXPANDED,
+            json = requestBody ?: "",
+            textStyle = MaterialTheme.typography.bodyMedium,
+            onError = { isNotJson = true },
+            onLoading = {
+                Text(text = stringResource(R.string.kommute_details_body_loading))
+            }
         )
+
+        if (isNotJson) {
+            Text(
+                text = requestBody ?: stringResource(R.string.kommute_details_request_body_empty),
+                style = MaterialTheme.typography.bodyMedium,
+                color = Color.DarkGray
+            )
+        }
     }
 }
 
@@ -297,31 +302,35 @@ private fun HeadersTab(
     requestHeaders: Map<String, String>,
     responseHeaders: Map<String, String>?
 ) {
-    Headline(text = stringResource(R.string.kommute_details_headline_url))
+    Column(
+        modifier = Modifier.verticalScroll(rememberScrollState()),
+    ) {
+        Headline(text = stringResource(R.string.kommute_details_headline_url))
 
-    Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
-    Text(
-        text = url,
-        style = MaterialTheme.typography.bodyMedium,
-        color = Color.DarkGray
-    )
+        Text(
+            text = url,
+            style = MaterialTheme.typography.bodyMedium,
+            color = Color.DarkGray
+        )
 
-    Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
-    Headline(text = stringResource(R.string.kommute_details_headline_request_headers))
+        Headline(text = stringResource(R.string.kommute_details_headline_request_headers))
 
-    Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
-    Headers(headers = requestHeaders)
+        Headers(headers = requestHeaders)
 
-    Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
-    Headline(text = stringResource(R.string.kommute_details_headline_response_headers))
+        Headline(text = stringResource(R.string.kommute_details_headline_response_headers))
 
-    Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
-    Headers(headers = responseHeaders)
+        Headers(headers = responseHeaders)
+    }
 }
 
 @Composable
@@ -389,7 +398,7 @@ private fun Headers(
             if (index < headers.size - 1) {
                 Spacer(modifier = Modifier.height(4.dp))
 
-                Divider(
+                HorizontalDivider(
                     modifier = Modifier.fillMaxWidth(),
                     color = Color.LightGray
                 )

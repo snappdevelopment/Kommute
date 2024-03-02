@@ -9,15 +9,9 @@ apply from: "$rootProject.projectDir/common-android.gradle"
 android {
     compileOptions {
         coreLibraryDesugaringEnabled true
-        targetCompatibility JavaVersion.toVersion(libs.versions.java.target.get())
-        sourceCompatibility JavaVersion.toVersion(libs.versions.java.target.get())
     }
     kotlinOptions {
-        jvmTarget = libs.versions.java.target.get()
         freeCompilerArgs += ["-Xexplicit-api=strict", "-Xjvm-default=all", "-opt-in=kotlin.RequiresOptIn"]
-    }
-    kotlin {
-        jvmToolchain(libs.versions.java.toolchain.get().toInteger())
     }
     buildFeatures {
         compose = true

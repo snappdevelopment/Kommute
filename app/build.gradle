@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId "com.sebastianneubauer.kommutedemo"
-        minSdk 26
+        minSdk libs.versions.android.min.get().toInteger()
         targetSdk libs.versions.android.target.get().toInteger()
         versionCode 1
         versionName "1.0"
@@ -38,14 +38,7 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.toVersion(libs.versions.java.target.get())
-        targetCompatibility JavaVersion.toVersion(libs.versions.java.target.get())
-    }
-    kotlinOptions {
-        jvmTarget = libs.versions.java.target.get()
-    }
-    kotlin {
-        jvmToolchain(libs.versions.java.toolchain.get().toInteger())
+        coreLibraryDesugaringEnabled true
     }
     buildFeatures {
         compose true
@@ -57,6 +50,12 @@ android {
         resources {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
+    }
+}
+
+kotlin {
+    jvmToolchain {
+        languageVersion.set(JavaLanguageVersion.of(libs.versions.java.toolchain.get()))
     }
 }
 
@@ -76,16 +75,10 @@ dependencies {
     implementation libs.coil
     implementation libs.coil.gif
     ksp libs.moshi.codegen
+    coreLibraryDesugaring libs.android.desugar
 
     testImplementation libs.testing.junit
 
     debugImplementation project(":kommute")
     releaseImplementation project(":kommute-no-op")
-}
-
-// forces KspKotlinCompile task to use java 11 instead of 17 for compatibility
-tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
-    kotlinOptions {
-        jvmTarget = libs.versions.java.target.get().toString()
-    }
 }

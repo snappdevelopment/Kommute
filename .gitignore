@@ -51,6 +51,8 @@ captures/
 # Comment next line if keeping position of elements in Navigation Editor is relevant for you
 .idea/navEditor.xml
 .idea/deploymentTargetDropDown.xml
+.idea/deploymentTargetSelector.xml
+.idea/migrations.xml
 .idea/JetClient
 
 # Keystore files
