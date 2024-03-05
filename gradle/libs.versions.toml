@@ -1,44 +1,38 @@
 [versions]
 android-min = "21"
-android-target = "33"
+android-target = "34"
 
-# R8/D8 doesn't support sealed classes with Gradle 8 and JDK 17 yet.
-# https://issuetracker.google.com/issues/227160052
-java-target = "11"
 java-toolchain = "17"
 
-gradle-plugin = "8.0.2"
-kotlin = "1.8.21"
-publish = "0.25.2"
-api-validator = "0.13.2"
-ksp = "1.8.21-1.0.11"
+gradle-plugin = "8.3.0"
+kotlin = "1.9.22"
+publish = "0.27.0"
+api-validator = "0.14.0"
+ksp = "1.9.22-1.0.17"
 
-androidx-core = "1.10.1"
-androidx-activity-compose = "1.7.2"
-androidx-compose-material3 = "1.1.0"
-androidx-compose-compiler = "1.4.7"
-androidx-compose-foundation = "1.4.3"
-androidx-compose-ui = "1.4.3"
-androidx-compose-runtime = "1.4.3"
-androidx-navigation = "2.6.0"
-androidx-lifecycle = "2.6.1"
-androidx-lifecycle-runtime-compose = "2.6.1"
+androidx-core = "1.12.0"
+androidx-activity-compose = "1.8.2"
+androidx-compose-compiler = "1.5.10"
+androidx-compose-bom = "2024.02.01"
+androidx-navigation = "2.7.7"
+androidx-lifecycle = "2.7.0"
+androidx-lifecycle-runtime-compose = "2.7.0"
 
-coroutines = "1.7.1"
+coroutines = "1.8.0"
 
-android-desugar = "2.0.3"
-jsontree = "1.0.1"
+android-desugar = "2.0.4"
+jsontree = "2.0.0"
 
-okhttp = "4.11.0"
-coil = "2.4.0"
+okhttp = "4.12.0"
+coil = "2.6.0"
 retrofit = "2.9.0"
 
-moshi = "1.15.0"
+moshi = "1.15.1"
 
 junit = "4.13.2"
 turbine = "0.13.0"
 json = "20230227"
-detekt = "1.23.0"
+detekt = "1.23.5"
 
 
 [libraries]
@@ -57,12 +51,13 @@ coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-androi
 androidx-core = { module = "androidx.core:core-ktx", version.ref = "androidx-core" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity-compose" }
 androidx-compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "androidx-compose-compiler" }
-androidx-compose-ui = { module = "androidx.compose.ui:ui", version.ref = "androidx-compose-ui" }
-androidx-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "androidx-compose-ui" }
-androidx-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "androidx-compose-ui" }
-androidx-compose-foundation = { module = "androidx.compose.foundation:foundation", version.ref = "androidx-compose-foundation" }
-androidx-compose-material = { module = "androidx.compose.material3:material3", version.ref = "androidx-compose-material3" }
-androidx-compose-runtime = { module = "androidx.compose.runtime:runtime", version.ref = "androidx-compose-runtime" }
+androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidx-compose-bom" }
+androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }
+androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation" }
+androidx-compose-material = { group = "androidx.compose.material3", name = "material3" }
+androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime" }
 androidx-navigation-common = { module = "androidx.navigation:navigation-common-ktx", version.ref = "androidx-navigation" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "androidx-navigation" }
 androidx-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidx-lifecycle" }
