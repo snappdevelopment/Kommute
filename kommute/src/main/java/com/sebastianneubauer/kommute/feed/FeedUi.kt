@@ -25,12 +25,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -118,7 +119,7 @@ private fun FeedList(
                     Request(item = item, onRequestClick = onRequestClick)
 
                     if (index < state.requests.size - 1) {
-                        Divider(
+                        HorizontalDivider(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(horizontal = 16.dp),
@@ -177,7 +178,7 @@ private fun Request(
 
             Spacer(modifier = Modifier.width(8.dp))
 
-            VerticalDivider()
+            InfoDivider()
 
             Spacer(modifier = Modifier.width(8.dp))
 
@@ -189,7 +190,7 @@ private fun Request(
 
             Spacer(modifier = Modifier.width(8.dp))
 
-            VerticalDivider()
+            InfoDivider()
 
             Spacer(modifier = Modifier.width(8.dp))
 
@@ -212,7 +213,7 @@ private fun Request(
 
                     Spacer(modifier = Modifier.width(8.dp))
 
-                    VerticalDivider()
+                    InfoDivider()
 
                     Spacer(modifier = Modifier.width(8.dp))
 
@@ -269,11 +270,10 @@ private fun BoxScope.Empty() {
 }
 
 @Composable
-private fun VerticalDivider() {
-    Divider(
-        modifier = Modifier
-            .fillMaxHeight()
-            .width(1.dp),
+private fun InfoDivider() {
+    VerticalDivider(
+        modifier = Modifier.fillMaxHeight(),
+        thickness = 1.dp,
         color = Color.DarkGray
     )
 }
