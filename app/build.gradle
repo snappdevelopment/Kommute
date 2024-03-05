@@ -61,17 +61,18 @@ kotlin {
 
 dependencies {
 
-    implementation libs.androidx.core
-    implementation libs.androidx.compose.compiler
+    implementation platform(libs.androidx.compose.bom)
     implementation libs.androidx.compose.ui
     implementation libs.androidx.compose.material
+    implementation libs.androidx.compose.ui.tooling
+    implementation libs.androidx.compose.ui.tooling.preview
+    implementation libs.androidx.compose.compiler
+    implementation libs.androidx.core
     implementation libs.androidx.lifecycle.runtime
     implementation libs.androidx.activity.compose
     implementation libs.retrofit
     implementation libs.retrofit.moshi
     implementation libs.moshi
-    implementation libs.androidx.compose.ui.tooling
-    implementation libs.androidx.compose.ui.tooling.preview
     implementation libs.coil
     implementation libs.coil.gif
     ksp libs.moshi.codegen

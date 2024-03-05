@@ -29,6 +29,7 @@ dependencies {
     implementation libs.coil
     implementation libs.coil.gif
 
+    implementation platform(libs.androidx.compose.bom)
     implementation libs.androidx.compose.compiler
     implementation libs.androidx.compose.ui
     implementation libs.androidx.compose.ui.tooling
