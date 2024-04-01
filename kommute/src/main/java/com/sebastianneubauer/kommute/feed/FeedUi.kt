@@ -1,6 +1,5 @@
 package com.sebastianneubauer.kommute.feed
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -169,7 +168,6 @@ private fun Request(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(enabled = item !is NetworkRequestListItem.Ongoing) {
-                Log.d("time", "click: ${System.currentTimeMillis()}")
                 onRequestClick(item.id)
             }
             .alpha(alpha = if (item is NetworkRequestListItem.Ongoing) 0.3F else 1F)
