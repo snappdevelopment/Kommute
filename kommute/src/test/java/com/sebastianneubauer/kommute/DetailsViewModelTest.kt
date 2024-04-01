@@ -8,6 +8,7 @@ import com.sebastianneubauer.kommute.helper.FakeNetworkDataRepository
 import com.sebastianneubauer.kommute.helper.MainDispatcherRule
 import com.sebastianneubauer.kommute.logging.NetworkRequest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Rule
@@ -22,7 +23,10 @@ internal class DetailsViewModelTest {
     private val repository = FakeNetworkDataRepository()
 
     private val underTest by lazy {
-        DetailsViewModel(repository = repository)
+        DetailsViewModel(
+            repository = repository,
+            defaultDispatcher = UnconfinedTestDispatcher()
+        )
     }
 
     private val finishedRequest = NetworkRequest.Finished(
@@ -41,16 +45,17 @@ internal class DetailsViewModelTest {
     @Test
     fun `finished request loaded successfully`() = runTest {
         repository.currentRequest = finishedRequest
+        underTest.setRequestId(finishedRequest.id)
 
-        underTest.state(finishedRequest.id).test {
+        underTest.state.test {
             assertEquals(DetailsState.Loading, awaitItem())
 
             val contentState = DetailsState.Content(
                 networkRequestDetailsItem = NetworkRequestDetailsItem(
                     url = "",
-                    requestBody = "{\"key\": \"value\"}",
+                    requestBody = "{\"key\":\"value\"}",
                     requestHeaders = mapOf("key" to "value1, value2"),
-                    responseBody = "{\"key\": \"value\"}",
+                    responseBody = "{\"key\":\"value\"}",
                     responseHeaders = mapOf("key" to "value1, value2")
                 )
             )
@@ -73,14 +78,15 @@ internal class DetailsViewModelTest {
         )
 
         repository.currentRequest = ongoingRequest
+        underTest.setRequestId(ongoingRequest.id)
 
-        underTest.state(ongoingRequest.id).test {
+        underTest.state.test {
             assertEquals(DetailsState.Loading, awaitItem())
 
             val contentState = DetailsState.Content(
                 networkRequestDetailsItem = NetworkRequestDetailsItem(
                     url = "",
-                    requestBody = "{\"key\": \"value\"}",
+                    requestBody = "{\"key\":\"value\"}",
                     requestHeaders = mapOf("key" to "value1, value2"),
                     responseBody = null,
                     responseHeaders = null
@@ -106,14 +112,15 @@ internal class DetailsViewModelTest {
         )
 
         repository.currentRequest = failedRequest
+        underTest.setRequestId(failedRequest.id)
 
-        underTest.state(failedRequest.id).test {
+        underTest.state.test {
             assertEquals(DetailsState.Loading, awaitItem())
 
             val contentState = DetailsState.Content(
                 networkRequestDetailsItem = NetworkRequestDetailsItem(
                     url = "",
-                    requestBody = "{\"key\": \"value\"}",
+                    requestBody = "{\"key\":\"value\"}",
                     requestHeaders = mapOf("key" to "value1, value2"),
                     responseBody = null,
                     responseHeaders = null
@@ -128,7 +135,9 @@ internal class DetailsViewModelTest {
 
     @Test
     fun `request loading failed`() = runTest {
-        underTest.state(requestId = 99).test {
+        underTest.setRequestId(99)
+
+        underTest.state.test {
             assertEquals(DetailsState.Loading, awaitItem())
             assertEquals(DetailsState.Error, awaitItem())
 
