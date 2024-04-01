@@ -1,5 +1,6 @@
 package com.sebastianneubauer.kommute.details
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
@@ -14,17 +15,18 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
-import androidx.compose.material3.TabRowDefaults
+import androidx.compose.material3.TabRowDefaults.SecondaryIndicator
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -40,7 +42,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -48,10 +49,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.SubcomposeAsyncImage
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.rememberPagerState
+import com.sebastianneubauer.jsontree.JsonTree
+import com.sebastianneubauer.jsontree.TreeState
 import com.sebastianneubauer.kommute.R
+import com.sebastianneubauer.kommute.ui.LocalKommuteImageLoader
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
@@ -62,9 +63,16 @@ internal fun DetailsUi(
     onBackClicked: () -> Unit
 ) {
     val viewModel: DetailsViewModel = viewModel(factory = viewModelFactory)
-    val state by viewModel.state(requestId).collectAsStateWithLifecycle()
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
-    Details(state, onBackClicked)
+    LaunchedEffect(requestId) {
+        viewModel.setRequestId(requestId)
+    }
+
+    Details(
+        state = state,
+        onBackClicked = onBackClicked
+    )
 }
 
 @Composable
@@ -86,9 +94,9 @@ private fun Details(
             }
 
             Box(modifier = Modifier.fillMaxSize()) {
-                when (val currentState = state) {
-                    is DetailsState.Initial -> Loading()
-                    is DetailsState.Content -> Content(currentState.networkRequestDetailsItem)
+                when (state) {
+                    is DetailsState.Loading -> Loading()
+                    is DetailsState.Content -> Content(state.networkRequestDetailsItem)
                     is DetailsState.Error -> Error()
                 }
             }
@@ -96,14 +104,18 @@ private fun Details(
     }
 }
 
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun Content(
-    networkRequestDetailsItem: NetworkRequestDetailsItem
+    networkRequestDetailsItem: NetworkRequestDetailsItem,
 ) {
     val coroutineScope = rememberCoroutineScope()
     var selectedTab by remember { mutableStateOf(SelectedTab.RESPONSE) }
-    val pagerState = rememberPagerState(selectedTab.index)
+    val pagerState = rememberPagerState(
+        initialPage = selectedTab.index,
+        pageCount = { SelectedTab.entries.size }
+    )
+
     LaunchedEffect(pagerState) {
         snapshotFlow { pagerState.currentPage }
             .distinctUntilChanged()
@@ -117,7 +129,7 @@ private fun Content(
             contentColor = Color.DarkGray,
             selectedTabIndex = selectedTab.index,
             indicator = { tabPositions ->
-                TabRowDefaults.Indicator(
+                SecondaryIndicator(
                     modifier = Modifier.tabIndicatorOffset(tabPositions[selectedTab.index]),
                     color = Color.DarkGray
                 )
@@ -158,13 +170,12 @@ private fun Content(
         }
 
         HorizontalPager(
-            count = 3,
+            beyondBoundsPageCount = 2,
             state = pagerState
         ) { pageIndex ->
-            Column(
+            Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
                     .padding(16.dp)
             ) {
                 when (pageIndex) {
@@ -200,42 +211,55 @@ private enum class SelectedTab(val index: Int) {
 
 @Composable
 private fun ResponseTab(
-    item: NetworkRequestDetailsItem
+    item: NetworkRequestDetailsItem,
 ) {
-    Headline(text = stringResource(R.string.kommute_details_headline_response_body))
+    Column {
+        Headline(text = stringResource(R.string.kommute_details_headline_response_body))
 
-    Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
-    val responseText = when {
-        item.responseBody != null -> item.responseBody
-        !item.isImage -> stringResource(R.string.kommute_details_response_body_empty)
-        else -> null
-    }
+        var isNotJson by remember(item.responseBody) { mutableStateOf(false) }
 
-    if (responseText != null) {
-        Text(
-            modifier = Modifier
-                .horizontalScroll(rememberScrollState())
-                .widthIn(max = LocalConfiguration.current.screenWidthDp.dp * 2),
-            text = responseText,
-            style = MaterialTheme.typography.bodyMedium,
-            color = Color.DarkGray
+        JsonTree(
+            modifier = Modifier.horizontalScroll(rememberScrollState()),
+            initialState = TreeState.EXPANDED,
+            json = item.responseBody ?: "",
+            textStyle = MaterialTheme.typography.bodyMedium,
+            onError = { isNotJson = true },
+            onLoading = {
+                Text(
+                    text = stringResource(R.string.kommute_details_body_loading),
+                    style = MaterialTheme.typography.bodyMedium,
+                )
+            }
         )
-    }
 
-    Spacer(modifier = Modifier.height(8.dp))
+        val responseText = when {
+            item.isImage -> null
+            item.responseBody != null -> item.responseBody
+            else -> stringResource(R.string.kommute_details_response_body_empty)
+        }
 
-    if (item.isImage) {
-        SubcomposeAsyncImage(
-            modifier = Modifier
-                .fillMaxWidth()
-                .aspectRatio(1F),
-            model = item.url,
-            alignment = Alignment.TopStart,
-            contentDescription = null,
-            loading = { ImagePlaceholder() },
-            error = { ImagePlaceholder() }
-        )
+        if (responseText != null && isNotJson) {
+            Text(
+                modifier = Modifier.verticalScroll(rememberScrollState()),
+                text = responseText,
+                style = MaterialTheme.typography.bodyMedium,
+                color = Color.DarkGray
+            )
+        } else if (item.isImage) {
+            SubcomposeAsyncImage(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(1F),
+                model = item.url,
+                imageLoader = LocalKommuteImageLoader.current,
+                alignment = Alignment.TopStart,
+                contentDescription = null,
+                loading = { ImagePlaceholder() },
+                error = { ImagePlaceholder() }
+            )
+        }
     }
 }
 
@@ -243,18 +267,36 @@ private fun ResponseTab(
 private fun RequestTab(
     requestBody: String?
 ) {
-    Headline(text = stringResource(R.string.kommute_details_headline_request_body))
+    Column {
+        Headline(text = stringResource(R.string.kommute_details_headline_request_body))
 
-    Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
-    Text(
-        modifier = Modifier
-            .horizontalScroll(rememberScrollState())
-            .widthIn(max = LocalConfiguration.current.screenWidthDp.dp * 2),
-        text = requestBody ?: stringResource(R.string.kommute_details_request_body_empty),
-        style = MaterialTheme.typography.bodyMedium,
-        color = Color.DarkGray
-    )
+        var isNotJson by remember(requestBody) { mutableStateOf(false) }
+
+        JsonTree(
+            modifier = Modifier.horizontalScroll(rememberScrollState()),
+            initialState = TreeState.EXPANDED,
+            json = requestBody ?: "",
+            textStyle = MaterialTheme.typography.bodyMedium,
+            onError = { isNotJson = true },
+            onLoading = {
+                Text(
+                    text = stringResource(R.string.kommute_details_body_loading),
+                    style = MaterialTheme.typography.bodyMedium,
+                )
+            }
+        )
+
+        if (isNotJson) {
+            Text(
+                modifier = Modifier.verticalScroll(rememberScrollState()),
+                text = requestBody ?: stringResource(R.string.kommute_details_request_body_empty),
+                style = MaterialTheme.typography.bodyMedium,
+                color = Color.DarkGray
+            )
+        }
+    }
 }
 
 @Composable
@@ -263,31 +305,35 @@ private fun HeadersTab(
     requestHeaders: Map<String, String>,
     responseHeaders: Map<String, String>?
 ) {
-    Headline(text = stringResource(R.string.kommute_details_headline_url))
+    Column(
+        modifier = Modifier.verticalScroll(rememberScrollState()),
+    ) {
+        Headline(text = stringResource(R.string.kommute_details_headline_url))
 
-    Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
-    Text(
-        text = url,
-        style = MaterialTheme.typography.bodyMedium,
-        color = Color.DarkGray
-    )
+        Text(
+            text = url,
+            style = MaterialTheme.typography.bodyMedium,
+            color = Color.DarkGray
+        )
 
-    Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
-    Headline(text = stringResource(R.string.kommute_details_headline_request_headers))
+        Headline(text = stringResource(R.string.kommute_details_headline_request_headers))
 
-    Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
-    Headers(headers = requestHeaders)
+        Headers(headers = requestHeaders)
 
-    Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
-    Headline(text = stringResource(R.string.kommute_details_headline_response_headers))
+        Headline(text = stringResource(R.string.kommute_details_headline_response_headers))
 
-    Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
-    Headers(headers = responseHeaders)
+        Headers(headers = responseHeaders)
+    }
 }
 
 @Composable
@@ -355,7 +401,7 @@ private fun Headers(
             if (index < headers.size - 1) {
                 Spacer(modifier = Modifier.height(4.dp))
 
-                Divider(
+                HorizontalDivider(
                     modifier = Modifier.fillMaxWidth(),
                     color = Color.LightGray
                 )
@@ -419,7 +465,7 @@ private fun ContentPreview() {
                         {
                             "id": "62d19ae39874bff5d95efb89",
                             "index": 0,
-                            "isActive": false,
+                            "isActive": false
                         }
                     ]
                 }
@@ -430,7 +476,7 @@ private fun ContentPreview() {
                         {
                             "id": "62d19ae39874bff5d95efb89",
                             "index": 0,
-                            "isActive": false,
+                            "isActive": false
                         }
                     ]
                 }
@@ -452,11 +498,17 @@ private fun ContentPreview() {
 @Composable
 @Preview
 private fun ErrorPreview() {
-    Details(state = DetailsState.Error, onBackClicked = {})
+    Details(
+        state = DetailsState.Error,
+        onBackClicked = {}
+    )
 }
 
 @Composable
 @Preview
 private fun LoadingPreview() {
-    Details(state = DetailsState.Initial, onBackClicked = {})
+    Details(
+        state = DetailsState.Loading,
+        onBackClicked = {}
+    )
 }

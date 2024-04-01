@@ -8,6 +8,7 @@
     <string name="kommute_details_headline_response_body">Response Body</string>
     <string name="kommute_details_response_body_empty">Empty Response Body</string>
     <string name="kommute_details_request_body_empty">Empty Request Body</string>
+    <string name="kommute_details_body_loading">Loading...</string>
     <string name="kommute_details_headers_empty">Empty Headers</string>
     <string name="kommute_details_state_error">Couldn\'t find request</string>
     <string name="kommute_notification_name">Kommute</string>

@@ -7,9 +7,6 @@ android {
         minSdk libs.versions.android.min.get().toInteger()
         targetSdk libs.versions.android.target.get().toInteger()
 
-        versionCode 1
-        versionName "0.0.1"
-
         aarMetadata {
             minCompileSdk = libs.versions.android.min.get().toInteger()
         }
@@ -17,5 +14,11 @@ android {
 
     buildFeatures {
         buildConfig = false
+    }
+}
+
+kotlin{
+    jvmToolchain {
+        languageVersion.set(JavaLanguageVersion.of(libs.versions.java.toolchain.get()))
     }
 }

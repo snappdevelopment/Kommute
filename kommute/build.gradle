@@ -9,11 +9,8 @@ apply from: "$rootProject.projectDir/common-android.gradle"
 android {
     compileOptions {
         coreLibraryDesugaringEnabled true
-        targetCompatibility JavaVersion.toVersion(libs.versions.java.get())
-        sourceCompatibility JavaVersion.toVersion(libs.versions.java.get())
     }
     kotlinOptions {
-        jvmTarget = libs.versions.java.get()
         freeCompilerArgs += ["-Xexplicit-api=strict", "-Xjvm-default=all", "-opt-in=kotlin.RequiresOptIn"]
     }
     buildFeatures {
@@ -30,7 +27,9 @@ dependencies {
 
     implementation libs.okhttp
     implementation libs.coil
+    implementation libs.coil.gif
 
+    implementation platform(libs.androidx.compose.bom)
     implementation libs.androidx.compose.compiler
     implementation libs.androidx.compose.ui
     implementation libs.androidx.compose.ui.tooling
@@ -48,8 +47,8 @@ dependencies {
     implementation libs.androidx.lifecycle.viewmodel.compose
     implementation libs.androidx.lifecycle.runtime.compose
 
-    implementation libs.accompanist.pager
-
+    implementation libs.jsontree
+    
     coreLibraryDesugaring libs.android.desugar
 
     testImplementation libs.testing.junit

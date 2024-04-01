@@ -6,22 +6,26 @@ import androidx.lifecycle.viewModelScope
 import com.sebastianneubauer.kommute.logging.NetworkDataRepository
 import com.sebastianneubauer.kommute.logging.NetworkRequest
 import com.sebastianneubauer.kommute.util.DateTimeFormatter
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
 internal class FeedViewModel(
     private val repository: NetworkDataRepository,
-    private val dateTimeFormatter: DateTimeFormatter
+    private val dateTimeFormatter: DateTimeFormatter,
+    private val defaultDispatcher: CoroutineDispatcher,
 ) : ViewModel() {
 
     val state: StateFlow<FeedState> = repository.requests
         .map { it.toFeedState() }
+        .flowOn(defaultDispatcher)
         .stateIn(
             scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(),
-            initialValue = Loading
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = FeedState.Loading
         )
 
     private fun List<NetworkRequest>.toFeedState(): FeedState {
@@ -53,7 +57,7 @@ internal class FeedViewModel(
                 }
             }
 
-        return if (items.isEmpty()) Empty else Content(items)
+        return if (items.isEmpty()) FeedState.Empty else FeedState.Content(items)
     }
 
     fun clearClicked() {
@@ -62,11 +66,16 @@ internal class FeedViewModel(
 
     class Factory(
         private val repository: NetworkDataRepository,
-        private val dateTimeFormatter: DateTimeFormatter
+        private val dateTimeFormatter: DateTimeFormatter,
+        private val defaultDispatcher: CoroutineDispatcher,
     ) : ViewModelProvider.Factory {
         @Suppress("Unchecked_cast")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return FeedViewModel(repository, dateTimeFormatter) as T
+            return FeedViewModel(
+                repository = repository,
+                dateTimeFormatter = dateTimeFormatter,
+                defaultDispatcher = defaultDispatcher,
+            ) as T
         }
     }
 }

@@ -4,6 +4,7 @@ import com.sebastianneubauer.kommute.logging.NetworkDataRepository
 import com.sebastianneubauer.kommute.logging.NetworkRequest
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.flowOf
 
 internal class FakeNetworkDataRepository : NetworkDataRepository {
 
@@ -17,8 +18,8 @@ internal class FakeNetworkDataRepository : NetworkDataRepository {
         requestFlow.tryEmit(requests)
     }
 
-    override fun request(id: Long): NetworkRequest? {
-        return currentRequest
+    override fun request(id: Long): Flow<NetworkRequest?> {
+        return flowOf(currentRequest)
     }
 
     override fun add(data: NetworkRequest) {

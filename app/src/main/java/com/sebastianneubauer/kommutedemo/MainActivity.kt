@@ -4,8 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -29,7 +27,7 @@ import coil.annotation.ExperimentalCoilApi
 import coil.compose.AsyncImage
 import coil.imageLoader
 import com.sebastianneubauer.kommute.Kommute
-import com.sebastianneubauer.kommutedemo.network.BitcoinApi
+import com.sebastianneubauer.kommutedemo.network.ProductsApi
 import com.sebastianneubauer.kommutedemo.network.getRetrofit
 import com.sebastianneubauer.kommutedemo.ui.theme.KommuteTheme
 import kotlinx.coroutines.delay
@@ -38,14 +36,14 @@ import kotlinx.coroutines.launch
 internal class MainActivity : ComponentActivity() {
 
     private val kommute = Kommute.getInstance()
-    private lateinit var api: BitcoinApi
+    private lateinit var api: ProductsApi
 
     @OptIn(ExperimentalCoilApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val retrofit = getRetrofit(this)
-        api = BitcoinApi(retrofit)
+        api = ProductsApi(retrofit)
 
         setContent {
             KommuteTheme {
@@ -53,8 +51,7 @@ internal class MainActivity : ComponentActivity() {
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(horizontal = 16.dp)
-                        .verticalScroll(rememberScrollState())
-                        .background(MaterialTheme.colorScheme.background),
+                        .verticalScroll(rememberScrollState()),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Spacer(modifier = Modifier.height(16.dp))
@@ -68,7 +65,7 @@ internal class MainActivity : ComponentActivity() {
                     Spacer(modifier = Modifier.height(16.dp))
 
                     Button(
-                        onClick = { loadBitcoinPrice() }
+                        onClick = { loadProducts() }
                     ) {
                         Text(text = "Make 3 api calls")
                     }
@@ -129,19 +126,19 @@ internal class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun loadBitcoinPrice() {
+    private fun loadProducts() {
         lifecycleScope.launch {
-            api.getBitcoinPrice()
+            api.getProducts()
             delay(3000)
-            api.getBitcoinPrice()
+            api.getProducts()
             delay(3000)
-            api.getBitcoinPrice()
+            api.getProducts()
         }
     }
 
     private fun makeNotFoundCall() {
         lifecycleScope.launch {
-            api.makeNotFoundCall()
+            api.getNonExistent()
         }
     }
 }

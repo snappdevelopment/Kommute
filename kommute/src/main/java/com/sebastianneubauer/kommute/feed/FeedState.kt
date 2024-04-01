@@ -1,11 +1,15 @@
 package com.sebastianneubauer.kommute.feed
 
-internal sealed class FeedState
+import androidx.compose.runtime.Immutable
 
-internal data class Content(
-    val requests: List<NetworkRequestListItem>
-) : FeedState()
+@Immutable
+internal sealed class FeedState {
 
-internal object Loading : FeedState()
+    data object Loading : FeedState()
 
-internal object Empty : FeedState()
+    data class Content(
+        val requests: List<NetworkRequestListItem>
+    ) : FeedState()
+
+    data object Empty : FeedState()
+}
