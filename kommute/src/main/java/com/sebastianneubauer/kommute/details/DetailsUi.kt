@@ -42,18 +42,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import coil.ImageLoader
 import coil.compose.SubcomposeAsyncImage
 import com.sebastianneubauer.jsontree.JsonTree
 import com.sebastianneubauer.jsontree.TreeState
 import com.sebastianneubauer.kommute.R
+import com.sebastianneubauer.kommute.ui.LocalKommuteImageLoader
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
@@ -61,19 +60,24 @@ import kotlinx.coroutines.launch
 internal fun DetailsUi(
     requestId: Long,
     viewModelFactory: DetailsViewModel.Factory,
-    imageLoader: ImageLoader,
     onBackClicked: () -> Unit
 ) {
     val viewModel: DetailsViewModel = viewModel(factory = viewModelFactory)
-    val state by viewModel.state(requestId).collectAsStateWithLifecycle()
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
-    Details(state, imageLoader, onBackClicked)
+    LaunchedEffect(requestId) {
+        viewModel.setRequestId(requestId)
+    }
+
+    Details(
+        state = state,
+        onBackClicked = onBackClicked
+    )
 }
 
 @Composable
 private fun Details(
     state: DetailsState,
-    imageLoader: ImageLoader,
     onBackClicked: () -> Unit
 ) {
     Box(
@@ -91,11 +95,8 @@ private fun Details(
 
             Box(modifier = Modifier.fillMaxSize()) {
                 when (state) {
-                    is DetailsState.Initial -> Loading()
-                    is DetailsState.Content -> Content(
-                        state.networkRequestDetailsItem,
-                        imageLoader
-                    )
+                    is DetailsState.Loading -> Loading()
+                    is DetailsState.Content -> Content(state.networkRequestDetailsItem)
                     is DetailsState.Error -> Error()
                 }
             }
@@ -107,13 +108,12 @@ private fun Details(
 @Composable
 private fun Content(
     networkRequestDetailsItem: NetworkRequestDetailsItem,
-    imageLoader: ImageLoader,
 ) {
     val coroutineScope = rememberCoroutineScope()
     var selectedTab by remember { mutableStateOf(SelectedTab.RESPONSE) }
     val pagerState = rememberPagerState(
         initialPage = selectedTab.index,
-        pageCount = { SelectedTab.values().size }
+        pageCount = { SelectedTab.entries.size }
     )
 
     LaunchedEffect(pagerState) {
@@ -179,7 +179,7 @@ private fun Content(
                     .padding(16.dp)
             ) {
                 when (pageIndex) {
-                    0 -> ResponseTab(networkRequestDetailsItem, imageLoader)
+                    0 -> ResponseTab(networkRequestDetailsItem)
                     1 -> RequestTab(networkRequestDetailsItem.requestBody)
                     2 -> HeadersTab(
                         url = networkRequestDetailsItem.url,
@@ -212,49 +212,48 @@ private enum class SelectedTab(val index: Int) {
 @Composable
 private fun ResponseTab(
     item: NetworkRequestDetailsItem,
-    imageLoader: ImageLoader,
 ) {
     Column {
         Headline(text = stringResource(R.string.kommute_details_headline_response_body))
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        val responseText = when {
-            item.responseBody != null -> item.responseBody
-            !item.isImage -> stringResource(R.string.kommute_details_response_body_empty)
-            else -> null
-        }
-
-        var isNotJson by remember(responseText) { mutableStateOf(false) }
+        var isNotJson by remember(item.responseBody) { mutableStateOf(false) }
 
         JsonTree(
             modifier = Modifier.horizontalScroll(rememberScrollState()),
             initialState = TreeState.EXPANDED,
-            json = responseText ?: "",
+            json = item.responseBody ?: "",
             textStyle = MaterialTheme.typography.bodyMedium,
             onError = { isNotJson = true },
             onLoading = {
-                Text(text = stringResource(R.string.kommute_details_body_loading))
+                Text(
+                    text = stringResource(R.string.kommute_details_body_loading),
+                    style = MaterialTheme.typography.bodyMedium,
+                )
             }
         )
 
+        val responseText = when {
+            item.isImage -> null
+            item.responseBody != null -> item.responseBody
+            else -> stringResource(R.string.kommute_details_response_body_empty)
+        }
+
         if (responseText != null && isNotJson) {
             Text(
+                modifier = Modifier.verticalScroll(rememberScrollState()),
                 text = responseText,
                 style = MaterialTheme.typography.bodyMedium,
                 color = Color.DarkGray
             )
-        }
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        if (item.isImage) {
+        } else if (item.isImage) {
             SubcomposeAsyncImage(
                 modifier = Modifier
                     .fillMaxWidth()
                     .aspectRatio(1F),
                 model = item.url,
-                imageLoader = imageLoader,
+                imageLoader = LocalKommuteImageLoader.current,
                 alignment = Alignment.TopStart,
                 contentDescription = null,
                 loading = { ImagePlaceholder() },
@@ -282,12 +281,16 @@ private fun RequestTab(
             textStyle = MaterialTheme.typography.bodyMedium,
             onError = { isNotJson = true },
             onLoading = {
-                Text(text = stringResource(R.string.kommute_details_body_loading))
+                Text(
+                    text = stringResource(R.string.kommute_details_body_loading),
+                    style = MaterialTheme.typography.bodyMedium,
+                )
             }
         )
 
         if (isNotJson) {
             Text(
+                modifier = Modifier.verticalScroll(rememberScrollState()),
                 text = requestBody ?: stringResource(R.string.kommute_details_request_body_empty),
                 style = MaterialTheme.typography.bodyMedium,
                 color = Color.DarkGray
@@ -488,7 +491,6 @@ private fun ContentPreview() {
                 ),
             )
         ),
-        imageLoader = ImageLoader(LocalContext.current),
         onBackClicked = {}
     )
 }
@@ -498,7 +500,6 @@ private fun ContentPreview() {
 private fun ErrorPreview() {
     Details(
         state = DetailsState.Error,
-        imageLoader = ImageLoader(LocalContext.current),
         onBackClicked = {}
     )
 }
@@ -507,8 +508,7 @@ private fun ErrorPreview() {
 @Preview
 private fun LoadingPreview() {
     Details(
-        state = DetailsState.Initial,
-        imageLoader = ImageLoader(LocalContext.current),
+        state = DetailsState.Loading,
         onBackClicked = {}
     )
 }

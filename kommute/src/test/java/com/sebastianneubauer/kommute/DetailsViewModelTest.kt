@@ -43,7 +43,7 @@ internal class DetailsViewModelTest {
         repository.currentRequest = finishedRequest
 
         underTest.state(finishedRequest.id).test {
-            assertEquals(DetailsState.Initial, awaitItem())
+            assertEquals(DetailsState.Loading, awaitItem())
 
             val contentState = DetailsState.Content(
                 networkRequestDetailsItem = NetworkRequestDetailsItem(
@@ -75,7 +75,7 @@ internal class DetailsViewModelTest {
         repository.currentRequest = ongoingRequest
 
         underTest.state(ongoingRequest.id).test {
-            assertEquals(DetailsState.Initial, awaitItem())
+            assertEquals(DetailsState.Loading, awaitItem())
 
             val contentState = DetailsState.Content(
                 networkRequestDetailsItem = NetworkRequestDetailsItem(
@@ -108,7 +108,7 @@ internal class DetailsViewModelTest {
         repository.currentRequest = failedRequest
 
         underTest.state(failedRequest.id).test {
-            assertEquals(DetailsState.Initial, awaitItem())
+            assertEquals(DetailsState.Loading, awaitItem())
 
             val contentState = DetailsState.Content(
                 networkRequestDetailsItem = NetworkRequestDetailsItem(
@@ -129,7 +129,7 @@ internal class DetailsViewModelTest {
     @Test
     fun `request loading failed`() = runTest {
         underTest.state(requestId = 99).test {
-            assertEquals(DetailsState.Initial, awaitItem())
+            assertEquals(DetailsState.Loading, awaitItem())
             assertEquals(DetailsState.Error, awaitItem())
 
             expectNoEvents()

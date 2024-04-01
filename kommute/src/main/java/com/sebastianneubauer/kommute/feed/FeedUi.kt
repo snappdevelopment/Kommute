@@ -1,7 +1,7 @@
 package com.sebastianneubauer.kommute.feed
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
@@ -37,6 +37,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -50,6 +51,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sebastianneubauer.kommute.R
+import com.sebastianneubauer.kommute.feed.FeedState.Content
+import com.sebastianneubauer.kommute.feed.FeedState.Empty
+import com.sebastianneubauer.kommute.feed.FeedState.Loading
 import kotlinx.coroutines.launch
 
 @Composable
@@ -60,10 +64,12 @@ internal fun FeedUi(
     val viewModel: FeedViewModel = viewModel(factory = viewModelFactory)
     val state: FeedState by viewModel.state.collectAsStateWithLifecycle()
 
+    val onClearClicked by rememberUpdatedState(newValue = viewModel::clearClicked)
+
     Feed(
         state = state,
         onRequestClick = onRequestClick,
-        onClearClick = viewModel::clearClicked
+        onClearClick = onClearClicked
     )
 }
 
@@ -86,7 +92,6 @@ private fun Feed(
     }
 }
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 private fun FeedList(
     state: Content,
@@ -163,7 +168,10 @@ private fun Request(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(enabled = item !is NetworkRequestListItem.Ongoing) { onRequestClick(item.id) }
+            .clickable(enabled = item !is NetworkRequestListItem.Ongoing) {
+                Log.d("time", "click: ${System.currentTimeMillis()}")
+                onRequestClick(item.id)
+            }
             .alpha(alpha = if (item is NetworkRequestListItem.Ongoing) 0.3F else 1F)
             .padding(vertical = 12.dp, horizontal = 16.dp)
     ) {
