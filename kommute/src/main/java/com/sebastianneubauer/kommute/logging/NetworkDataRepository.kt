@@ -1,9 +1,11 @@
 package com.sebastianneubauer.kommute.logging
 
 import androidx.annotation.VisibleForTesting
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.transformLatest
 
 internal interface NetworkDataRepository {
     /**
@@ -15,7 +17,7 @@ internal interface NetworkDataRepository {
      * Returns the [NetworkRequest] with the given [id] or
      * null if the request doesn't exist.
      */
-    fun request(id: Long): NetworkRequest?
+    fun request(id: Long): Flow<NetworkRequest?>
 
     /**
      * Adds a new [NetworkRequest] to the list of requests.
@@ -40,6 +42,7 @@ internal interface NetworkDataRepository {
     }
 }
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @VisibleForTesting
 internal class InMemoryNetworkDataRepository : NetworkDataRepository {
 
@@ -50,8 +53,10 @@ internal class InMemoryNetworkDataRepository : NetworkDataRepository {
 
     override val requests: Flow<List<NetworkRequest>> = updates.onStart { emit(networkRequests) }
 
-    override fun request(id: Long): NetworkRequest? {
-        return networkRequests.firstOrNull { it.id == id }
+    override fun request(id: Long): Flow<NetworkRequest?> {
+        return updates
+            .transformLatest<List<NetworkRequest>, NetworkRequest?> { it.firstOrNull { it.id == id } }
+            .onStart { emit(networkRequests.firstOrNull { it.id == id }) }
     }
 
     override fun add(data: NetworkRequest) {

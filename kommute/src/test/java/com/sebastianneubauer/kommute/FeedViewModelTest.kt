@@ -1,16 +1,17 @@
 package com.sebastianneubauer.kommute
 
 import app.cash.turbine.test
-import com.sebastianneubauer.kommute.feed.Content
-import com.sebastianneubauer.kommute.feed.Empty
+import com.sebastianneubauer.kommute.feed.FeedState.Content
+import com.sebastianneubauer.kommute.feed.FeedState.Empty
+import com.sebastianneubauer.kommute.feed.FeedState.Loading
 import com.sebastianneubauer.kommute.feed.FeedViewModel
-import com.sebastianneubauer.kommute.feed.Loading
 import com.sebastianneubauer.kommute.feed.NetworkRequestListItem
 import com.sebastianneubauer.kommute.helper.FakeDateTimeFormatter
 import com.sebastianneubauer.kommute.helper.FakeNetworkDataRepository
 import com.sebastianneubauer.kommute.helper.MainDispatcherRule
 import com.sebastianneubauer.kommute.logging.NetworkRequest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Rule
@@ -28,7 +29,8 @@ internal class FeedViewModelTest {
     private val underTest by lazy {
         FeedViewModel(
             repository = repository,
-            dateTimeFormatter = dateTimeFormatter
+            dateTimeFormatter = dateTimeFormatter,
+            defaultDispatcher = UnconfinedTestDispatcher()
         )
     }
 
