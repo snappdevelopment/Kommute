@@ -50,6 +50,8 @@ Kommute.getInstance().start(context)
 
 Click the expand icon on the notification to open Kommutes Bubble.
 
+The consumer app needs to enable `coreLibraryDesugaring`. More info [here](https://developer.android.com/studio/write/java8-support).
+
 ## Images and Gifs
 
 Like regular API calls, Kommute can show calls to image and gif links and display the returned image/gif. To enable this behaviour, your image loading library needs to use the same OkHttpClient you use for networking. The following example shows the setup with [Coil](https://coil-kt.github.io/coil/).
@@ -74,6 +76,13 @@ ImageLoader.Builder(context)
 After providing the Imageloader through the [ImageLoadingFactory](https://coil-kt.github.io/coil/getting_started/#image-loaders), it is ready to use with Coils ImageRequest or AsyncImage.
 
 Note: If your ImageLoader uses a cache, subsequent requests to the same image might not be shown in Kommute.
+
+## Minimum Requirements
+
+- Min SDK 21
+- Compile SDK 34
+- JDK 17
+- coreLibraryDesugaring enabled
 
 ## Tech Stack
 
