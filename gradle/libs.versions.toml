@@ -16,7 +16,7 @@ androidx-compose-compiler = "1.5.12"
 androidx-compose-bom = "2024.04.01"
 androidx-navigation = "2.7.7"
 androidx-lifecycle = "2.7.0"
-androidx-lifecycle-runtime-compose = "2.7.0"
+androidx-lifecycle-runtime-compose = "2.8.1"
 
 coroutines = "1.8.0"
 
