@@ -10,7 +10,7 @@ publish = "0.28.0"
 api-validator = "0.14.0"
 ksp = "2.0.0-1.0.22"
 
-androidx-core = "1.13.0"
+androidx-core = "1.13.1"
 androidx-activity-compose = "1.9.0"
 androidx-compose-bom = "2024.05.00"
 androidx-navigation = "2.7.7"
