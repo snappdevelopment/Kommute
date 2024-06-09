@@ -1,6 +1,7 @@
 plugins {
     alias libs.plugins.android.application
     alias libs.plugins.kotlin.android
+    alias libs.plugins.compose.compiler
     alias libs.plugins.ksp
 }
 
@@ -43,9 +44,6 @@ android {
     buildFeatures {
         compose true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion libs.versions.androidx.compose.compiler.get()
-    }
     packagingOptions {
         resources {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
@@ -59,6 +57,10 @@ kotlin {
     }
 }
 
+composeCompiler {
+    enableStrongSkippingMode = true
+}
+
 dependencies {
 
     implementation platform(libs.androidx.compose.bom)
@@ -66,7 +68,6 @@ dependencies {
     implementation libs.androidx.compose.material
     implementation libs.androidx.compose.ui.tooling
     implementation libs.androidx.compose.ui.tooling.preview
-    implementation libs.androidx.compose.compiler
     implementation libs.androidx.core
     implementation libs.androidx.lifecycle.runtime
     implementation libs.androidx.activity.compose
