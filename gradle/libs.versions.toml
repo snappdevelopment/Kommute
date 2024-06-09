@@ -5,15 +5,14 @@ android-target = "34"
 java-toolchain = "17"
 
 gradle-plugin = "8.3.2"
-kotlin = "1.9.23"
+kotlin = "2.0.0"
 publish = "0.28.0"
 api-validator = "0.14.0"
-ksp = "1.9.23-1.0.20"
+ksp = "2.0.0-1.0.22"
 
 androidx-core = "1.13.0"
 androidx-activity-compose = "1.9.0"
-androidx-compose-compiler = "1.5.12"
-androidx-compose-bom = "2024.04.01"
+androidx-compose-bom = "2024.05.00"
 androidx-navigation = "2.7.7"
 androidx-lifecycle = "2.7.0"
 androidx-lifecycle-runtime-compose = "2.7.0"
@@ -50,7 +49,6 @@ coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-androi
 
 androidx-core = { module = "androidx.core:core-ktx", version.ref = "androidx-core" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity-compose" }
-androidx-compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "androidx-compose-compiler" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidx-compose-bom" }
 androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
@@ -82,6 +80,7 @@ publish = { module = "com.vanniktech:gradle-maven-publish-plugin", version.ref =
 android-application = { id = "com.android.application", version.ref = "gradle-plugin" }
 android-library = { id = "com.android.library", version.ref = "gradle-plugin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 publish = { id = "com.vanniktech.maven.publish", version.ref = "publish" }
 api-validator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version.ref = "api-validator" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
