@@ -17,7 +17,7 @@ androidx-navigation = "2.7.7"
 androidx-lifecycle = "2.7.0"
 androidx-lifecycle-runtime-compose = "2.8.1"
 
-coroutines = "1.8.0"
+coroutines = "1.8.1"
 
 android-desugar = "2.0.4"
 jsontree = "2.2.0"
