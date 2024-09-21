@@ -1,6 +1,6 @@
 # <img src="screenshots/kommuteIcon.png" height="25"> Kommute 
 
-![](https://img.shields.io/maven-central/v/com.sebastianneubauer/kommute) ![](https://img.shields.io/badge/Kotlin-1.8.21-orange) ![](https://img.shields.io/badge/SDK-21+-brightgreen) ![](https://img.shields.io/badge/Android_Weekly-Issue_557-yellow)
+![](https://img.shields.io/maven-central/v/com.sebastianneubauer/kommute) ![](https://img.shields.io/badge/Kotlin-2.0.20-orange) ![](https://img.shields.io/badge/SDK-21+-brightgreen) ![](https://img.shields.io/badge/Android_Weekly-Issue_557-yellow)
 <br /><br />
 Kommute is an Android library to observe your apps network traffic while debugging.
 <br /><br />

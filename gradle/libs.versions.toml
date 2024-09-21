@@ -4,23 +4,23 @@ android-target = "34"
 
 java-toolchain = "17"
 
-gradle-plugin = "8.4.1"
-kotlin = "2.0.0"
-publish = "0.28.0"
-api-validator = "0.14.0"
-ksp = "2.0.0-1.0.22"
+gradle-plugin = "8.5.2"
+kotlin = "2.0.20"
+publish = "0.29.0"
+api-validator = "0.16.3"
+ksp = "2.0.20-1.0.25"
 
 androidx-core = "1.13.1"
 androidx-activity-compose = "1.9.2"
-androidx-compose-bom = "2024.05.00"
-androidx-navigation = "2.7.7"
-androidx-lifecycle = "2.8.6" # 2.8.1 is not compatible with Compose 2024.05.00 because LocalLifecyleOwner got moved to different package
-androidx-lifecycle-runtime-compose = "2.7.0"
+androidx-compose-bom = "2024.09.02"
+androidx-navigation = "2.8.1"
+androidx-lifecycle = "2.8.6"
+androidx-lifecycle-runtime-compose = "2.8.6"
 
-coroutines = "1.8.1"
+coroutines = "1.9.0"
 
-android-desugar = "2.0.4"
-jsontree = "2.2.0"
+android-desugar = "2.1.2"
+jsontree = "2.3.0"
 
 okhttp = "4.12.0"
 coil = "2.7.0"
@@ -31,7 +31,7 @@ moshi = "1.15.1"
 junit = "4.13.2"
 turbine = "1.1.0"
 json = "20240303"
-detekt = "1.23.6"
+detekt = "1.23.7"
 
 
 [libraries]

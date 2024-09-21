@@ -170,7 +170,7 @@ private fun Content(
         }
 
         HorizontalPager(
-            beyondBoundsPageCount = 2,
+            beyondViewportPageCount = 2,
             state = pagerState
         ) { pageIndex ->
             Box(
