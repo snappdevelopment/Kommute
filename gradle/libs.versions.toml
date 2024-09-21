@@ -11,7 +11,7 @@ api-validator = "0.14.0"
 ksp = "2.0.0-1.0.22"
 
 androidx-core = "1.13.1"
-androidx-activity-compose = "1.9.0"
+androidx-activity-compose = "1.9.2"
 androidx-compose-bom = "2024.05.00"
 androidx-navigation = "2.7.7"
 androidx-lifecycle = "2.7.0" # 2.8.1 is not compatible with Compose 2024.05.00 because LocalLifecyleOwner got moved to different package
