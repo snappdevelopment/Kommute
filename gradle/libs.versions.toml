@@ -17,7 +17,7 @@ androidx-navigation = "2.7.7"
 androidx-lifecycle = "2.7.0" # 2.8.1 is not compatible with Compose 2024.05.00 because LocalLifecyleOwner got moved to different package
 androidx-lifecycle-runtime-compose = "2.7.0"
 
-coroutines = "1.8.1"
+coroutines = "1.9.0"
 
 android-desugar = "2.0.4"
 jsontree = "2.2.0"
