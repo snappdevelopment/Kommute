@@ -11,7 +11,7 @@ api-validator = "0.16.3"
 ksp = "2.0.20-1.0.25"
 
 androidx-core = "1.13.1"
-androidx-activity-compose = "1.9.2"
+androidx-activity-compose = "1.10.1"
 androidx-compose-bom = "2024.09.02"
 androidx-navigation = "2.8.1"
 androidx-lifecycle = "2.8.6"
