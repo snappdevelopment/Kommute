@@ -6,7 +6,7 @@ java-toolchain = "17"
 
 gradle-plugin = "8.5.2"
 kotlin = "2.0.20"
-publish = "0.29.0"
+publish = "0.32.0"
 api-validator = "0.16.3"
 ksp = "2.0.20-1.0.25"
 
