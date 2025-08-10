@@ -12,7 +12,7 @@ ksp = "2.0.20-1.0.25"
 
 androidx-core = "1.13.1"
 androidx-activity-compose = "1.9.2"
-androidx-compose-bom = "2024.09.02"
+androidx-compose-bom = "2024.12.01"
 androidx-navigation = "2.8.1"
 androidx-lifecycle = "2.8.6"
 androidx-lifecycle-runtime-compose = "2.8.6"
